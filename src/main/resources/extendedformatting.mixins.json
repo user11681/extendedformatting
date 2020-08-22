@@ -1,0 +1,16 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "user11681.extendedformatting.asm.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "formatting.FormattingMixin",
+        "formatting.StyleMixin",
+        "formatting.TextRendererDrawerMixin"
+    ],
+    "client": [
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
