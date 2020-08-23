@@ -26,5 +26,7 @@ public class PhormatPostinitializer implements PreLaunchEntrypoint {
 
             FormattingPatternAccess.setPattern(Pattern.compile(pattern.replace("]", code + "]")));
         }
+
+        PhormatInitializer.formatToCode = null;
     }
 }

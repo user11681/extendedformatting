@@ -5,23 +5,37 @@ import com.chocohead.mm.api.EnumAdder;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.Reference2CharOpenHashMap;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.CustomValue;
 
 public class PhormatInitializer implements Runnable {
-    static final Reference2CharOpenHashMap<Phormatting> formatToCode = new Reference2CharOpenHashMap<>();
-    static final ObjectOpenHashSet<String> names = new ObjectOpenHashSet<>();
-
-    static boolean initializing;
+    static Reference2CharOpenHashMap<Phormatting> formatToCode = new Reference2CharOpenHashMap<>();
+    static ObjectOpenHashSet<String> names = new ObjectOpenHashSet<>();
     static EnumAdder colorAdder;
     static EnumAdder modifierAdder;
     static EnumAdder primaryAdder;
+    static boolean initializing;
 
     @Override
     public void run() {
         initializing = true;
 
-        for (final EntrypointContainer<Runnable> entrypoint : FabricLoader.getInstance().getEntrypointContainers("phormat", Runnable.class)) {
-            entrypoint.getEntrypoint().run();
+        for (final ModContainer mod : FabricLoader.getInstance().getAllMods()) {
+            final CustomValue initValue = mod.getMetadata().getCustomValue("phormat:init");
+
+            if (initValue != null) {
+                if (tryLoadClass(mod, initValue)) {
+                    if (initValue.getType() == CustomValue.CvType.ARRAY) {
+                        for (final CustomValue element : initValue.getAsArray()) {
+                            if (tryLoadClass(mod, element)) {
+                                throw new IllegalArgumentException(String.format("a non-string value was found in the phormat:init array in the Fabric configuration file of mod %s", mod.getMetadata().getName()));
+                            }
+                        }
+                    } else {
+                        throw new IllegalArgumentException(String.format("the value of phormat:init in the Fabric configuration file of mod %s is not a binary class name or an array of binary class names", mod.getMetadata().getName()));
+                    }
+                }
+            }
         }
 
         initializing = false;
@@ -29,9 +43,24 @@ public class PhormatInitializer implements Runnable {
         colorAdder.build();
         modifierAdder.build();
         primaryAdder.build();
+        names = null;
         colorAdder = null;
         modifierAdder = null;
         primaryAdder = null;
+    }
+
+    private static boolean tryLoadClass(final ModContainer mod, final CustomValue value) {
+        if (value.getType() == CustomValue.CvType.STRING) {
+            try {
+                Class.forName(value.getAsString(), true, PhormatInitializer.class.getClassLoader());
+            } catch (final ClassNotFoundException exception) {
+                throw new IllegalArgumentException(String.format("class %s specified in the Fabric configuration file of mod %s does not exist", value.getAsString(), mod.getMetadata().getName()));
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     static {

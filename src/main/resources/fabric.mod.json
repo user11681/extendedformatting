@@ -2,8 +2,8 @@
     "schemaVersion": 1,
     "id": "phormat",
     "version": "0.0.0",
-    "name": "extended formatting",
-    "description": "a library for adding formatting options",
+    "name": "phormat",
+    "description": "a library for adding custom formatting",
     "authors": [
         "user11681"
     ],
