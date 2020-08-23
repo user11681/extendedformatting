@@ -13,7 +13,7 @@ public class ExtendedFormattingPostinitializer implements PreLaunchEntrypoint {
     public void onPreLaunch() {
         final String pattern = FormattingPatternAccess.getPattern().toString();
 
-        for (final Reference2CharMap.Entry<Format> entry : ExtendedFormattingInitializer.formats.reference2CharEntrySet()) {
+        for (final Reference2CharMap.Entry<Format> entry : ExtendedFormattingInitializer.formatToCode.reference2CharEntrySet()) {
             final Format format = entry.getKey();
             final char code = entry.getCharValue();
 

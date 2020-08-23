@@ -57,9 +57,13 @@ public class Format {
             throw new IllegalStateException("All custom formats should be constructed in the \"extendedformatting\" entrypoint.");
         }
 
+        if (ExtendedFormattingInitializer.names.contains(name)) {
+            throw new IllegalArgumentException(String.format("a formatting with name %s already exists.", name));
+        }
+
         this.name = name;
 
-        ExtendedFormattingInitializer.formats.put(this, code);
+        ExtendedFormattingInitializer.formatToCode.put(this, code);
 
     }
 

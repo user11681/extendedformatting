@@ -2,12 +2,14 @@ package user11681.extendedformatting;
 
 import com.chocohead.mm.api.ClassTinkerers;
 import com.chocohead.mm.api.EnumAdder;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.Reference2CharOpenHashMap;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 
 public class ExtendedFormattingInitializer implements Runnable {
-    static final Reference2CharOpenHashMap<Format> formats = new Reference2CharOpenHashMap<>();
+    static final Reference2CharOpenHashMap<Format> formatToCode = new Reference2CharOpenHashMap<>();
+    static final ObjectOpenHashSet<String> names = new ObjectOpenHashSet<>();
 
     static boolean initializing;
     static EnumAdder colorAdder;
