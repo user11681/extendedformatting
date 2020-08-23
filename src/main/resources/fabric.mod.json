@@ -15,13 +15,10 @@
     "environment": "*",
     "entrypoints": {
         "mm:early_risers": [
-            "user11681.extendedformatting.ExtendedFormatting"
+            "user11681.extendedformatting.ExtendedFormattingInitializer"
         ],
         "preLaunch": [
-            "user11681.extendedformatting.ExtendedFormatting$Postinit"
-        ],
-        "extendedformatting": [
-            "user11681.extendedformatting.Test::init"
+            "user11681.extendedformatting.ExtendedFormattingPostinitializer"
         ]
     },
     "mixins": [

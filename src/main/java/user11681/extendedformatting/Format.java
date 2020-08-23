@@ -13,37 +13,37 @@ public class Format {
     public Format(final String name, final char code, final int colorIndex, @Nullable final Integer color) {
         this(name, code);
 
-        ExtendedFormatting.colorAdder.addEnum(name, name, code, colorIndex, color);
+        ExtendedFormattingInitializer.colorAdder.addEnum(name, name, code, colorIndex, color);
     }
 
     public Format(final String name, final char code, final boolean modifier) {
         this(name, code);
 
-        ExtendedFormatting.modifierAdder.addEnum(name, name, code, modifier);
+        ExtendedFormattingInitializer.modifierAdder.addEnum(name, name, code, modifier);
     }
 
     public Format(final String name, final char code, final boolean modifier, final int colorIndex, @Nullable final Integer color) {
         this(name, code);
 
-        ExtendedFormatting.primaryAdder.addEnum(name, name, code, modifier, colorIndex, color);
+        ExtendedFormattingInitializer.primaryAdder.addEnum(name, name, code, modifier, colorIndex, color);
     }
 
     public Format(final String name, final char code, final int colorIndex, @Nullable final Integer color, final Formatter formatter) {
         this(name, code, formatter);
 
-        ExtendedFormatting.colorAdder.addEnum(name, name, code, colorIndex, color);
+        ExtendedFormattingInitializer.colorAdder.addEnum(name, name, code, colorIndex, color);
     }
 
     public Format(final String name, final char code, final boolean modifier, final Formatter formatter) {
         this(name, code, formatter);
 
-        ExtendedFormatting.modifierAdder.addEnum(name, name, code, modifier);
+        ExtendedFormattingInitializer.modifierAdder.addEnum(name, name, code, modifier);
     }
 
     public Format(final String name, final char code, final boolean modifier, final int colorIndex, @Nullable final Integer color, final Formatter formatter) {
         this(name, code, formatter);
 
-        ExtendedFormatting.primaryAdder.addEnum(name, name, code, modifier, colorIndex, color);
+        ExtendedFormattingInitializer.primaryAdder.addEnum(name, name, code, modifier, colorIndex, color);
     }
 
     private Format(final String name, final char code, final Formatter formatter) {
@@ -53,13 +53,13 @@ public class Format {
     }
 
     private Format(final String name, final char code) {
-        if (!ExtendedFormatting.initializing) {
+        if (!ExtendedFormattingInitializer.initializing) {
             throw new IllegalStateException("All custom formats should be constructed in the \"extendedformatting\" entrypoint.");
         }
 
         this.name = name;
 
-        ExtendedFormatting.formats.put(this, code);
+        ExtendedFormattingInitializer.formats.put(this, code);
 
     }
 

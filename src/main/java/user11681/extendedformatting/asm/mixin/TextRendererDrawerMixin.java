@@ -86,7 +86,7 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
     @Invoker("addRectangle")
     public abstract void invokeAddRectangle(GlyphRenderer.Rectangle rectangle);
 
-    @Inject(method = "accept", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "accept(ILnet/minecraft/text/Style;I)Z", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void formatCustom(final int i,
                              final Style style,
                              final int j,
