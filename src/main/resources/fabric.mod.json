@@ -1,7 +1,7 @@
 {
     "schemaVersion": 1,
     "id": "extendedformatting",
-    "version": "${version}",
+    "version": "0.0.0",
     "name": "extended formatting",
     "description": "a library for adding formatting options",
     "authors": [
@@ -15,10 +15,10 @@
     "environment": "*",
     "entrypoints": {
         "mm:early_risers": [
-            "user11681.extendedformatting.ExtendedFormattingInitializer"
+            "user11681.phormat.PhormatInitializer"
         ],
         "preLaunch": [
-            "user11681.extendedformatting.ExtendedFormattingPostinitializer"
+            "user11681.phormat.PhormatPostinitializer"
         ]
     },
     "mixins": [

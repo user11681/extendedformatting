@@ -1,4 +1,4 @@
-package user11681.extendedformatting.asm.mixin;
+package user11681.phormat.asm.mixin;
 
 import it.unimi.dsi.fastutil.objects.Object2ReferenceArrayMap;
 import java.util.Map;
@@ -9,16 +9,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import user11681.extendedformatting.Format;
-import user11681.extendedformatting.asm.access.CustomFormattingAccess;
+import user11681.phormat.Phormatting;
+import user11681.phormat.asm.access.PhormatAccess;
 
 @Mixin(Formatting.class)
-public abstract class FormattingMixin implements CustomFormattingAccess {
+public abstract class FormattingMixin implements PhormatAccess {
     @Unique
     private final Formatting self = (Formatting) (Object) this;
 
     @Unique
-    private Format format;
+    private Phormatting format;
 
     @Unique
     public boolean custom;
@@ -46,13 +46,13 @@ public abstract class FormattingMixin implements CustomFormattingAccess {
 
     @Override
     @Unique
-    public Format getFormat() {
+    public Phormatting getFormat() {
         return this.format;
     }
 
     @Override
     @Unique
-    public void setFormat(final Format format) {
+    public void setFormat(final Phormatting format) {
         this.format = format;
         this.custom = true;
     }

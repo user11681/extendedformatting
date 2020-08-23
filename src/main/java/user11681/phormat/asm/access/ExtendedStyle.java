@@ -1,4 +1,4 @@
-package user11681.extendedformatting.asm.access;
+package user11681.phormat.asm.access;
 
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.text.Style;
@@ -11,11 +11,11 @@ public interface ExtendedStyle {
 
     void addCustomFormattings(Formatting... formattings);
 
-    void addCustomFormattings(CustomFormattingAccess... formattings);
+    void addCustomFormattings(PhormatAccess... formattings);
 
-    void addCustomFormatting(CustomFormattingAccess formatting);
+    void addCustomFormatting(PhormatAccess formatting);
 
-    ReferenceArrayList<CustomFormattingAccess> getCustomFormattings();
+    ReferenceArrayList<PhormatAccess> getCustomFormattings();
 
     Style cast();
 }

@@ -1,4 +1,4 @@
-package user11681.extendedformatting.asm.mixin;
+package user11681.phormat.asm.mixin;
 
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.text.Style;
@@ -8,17 +8,17 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import user11681.extendedformatting.asm.access.ExtendedStyle;
-import user11681.extendedformatting.asm.access.CustomFormattingAccess;
+import user11681.phormat.asm.access.ExtendedStyle;
+import user11681.phormat.asm.access.PhormatAccess;
 
 @Mixin(Style.class)
 public abstract class StyleMixin implements ExtendedStyle {
     @Unique
-    private final ReferenceArrayList<CustomFormattingAccess> customFormattings = new ReferenceArrayList<>(10);
+    private final ReferenceArrayList<PhormatAccess> customFormattings = new ReferenceArrayList<>(10);
 
     @Override
     @Unique
-    public ReferenceArrayList<CustomFormattingAccess> getCustomFormattings() {
+    public ReferenceArrayList<PhormatAccess> getCustomFormattings() {
         return this.customFormattings;
     }
 
@@ -31,24 +31,24 @@ public abstract class StyleMixin implements ExtendedStyle {
     @Override
     @Unique
     public void addCustomFormatting(final Formatting format) {
-        this.customFormattings.add(CustomFormattingAccess.class.cast(format));
+        this.customFormattings.add(PhormatAccess.class.cast(format));
     }
 
     @Override
     @Unique
     public void addCustomFormattings(final Formatting... formattings) {
-        this.customFormattings.addElements(this.customFormattings.size(), CustomFormattingAccess[].class.cast(formattings));
+        this.customFormattings.addElements(this.customFormattings.size(), PhormatAccess[].class.cast(formattings));
     }
 
     @Override
     @Unique
-    public void addCustomFormattings(final CustomFormattingAccess... formattings) {
+    public void addCustomFormattings(final PhormatAccess... formattings) {
         this.customFormattings.addElements(this.customFormattings.size(), formattings);
     }
 
     @Override
     @Unique
-    public void addCustomFormatting(final CustomFormattingAccess format) {
+    public void addCustomFormatting(final PhormatAccess format) {
         this.customFormattings.add(format);
     }
 
@@ -65,7 +65,7 @@ public abstract class StyleMixin implements ExtendedStyle {
 
         style.customFormattings.addAll(customFormattings);
 
-        if (CustomFormattingAccess.class.cast(formatting).isCustom()) {
+        if (PhormatAccess.class.cast(formatting).isCustom()) {
             style.addCustomFormatting(formatting);
         }
     }
@@ -75,7 +75,7 @@ public abstract class StyleMixin implements ExtendedStyle {
     public void addCustomFormatting(final Formatting[] formattings, final CallbackInfoReturnable<Style> info) {
         final StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
 
-        for (final CustomFormattingAccess format : CustomFormattingAccess[].class.cast(formattings)) {
+        for (final PhormatAccess format : PhormatAccess[].class.cast(formattings)) {
             if (format.isCustom()) {
                 style.customFormattings.add(format);
             }

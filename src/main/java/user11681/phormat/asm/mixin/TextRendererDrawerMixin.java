@@ -1,4 +1,4 @@
-package user11681.extendedformatting.asm.mixin;
+package user11681.phormat.asm.mixin;
 
 import java.util.List;
 import net.fabricmc.api.EnvType;
@@ -17,10 +17,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import user11681.extendedformatting.Formatter;
-import user11681.extendedformatting.asm.access.CustomFormattingAccess;
-import user11681.extendedformatting.asm.access.ExtendedStyle;
-import user11681.extendedformatting.asm.access.TextRendererDrawerAccess;
+import user11681.phormat.Phormatter;
+import user11681.phormat.asm.access.PhormatAccess;
+import user11681.phormat.asm.access.ExtendedStyle;
+import user11681.phormat.asm.access.TextRendererDrawerAccess;
 
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("public-target")
@@ -100,9 +100,9 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
                              final float blue,
                              final float alpha,
                              final float advance) {
-        Formatter formatter;
+        Phormatter formatter;
 
-        for (final CustomFormattingAccess formatting : ((ExtendedStyle) style).getCustomFormattings()) {
+        for (final PhormatAccess formatting : ((ExtendedStyle) style).getCustomFormattings()) {
             if (formatting.isCustom()) {
                 formatter = formatting.getFormat().formatter;
 

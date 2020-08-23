@@ -1,4 +1,4 @@
-package user11681.extendedformatting.asm.mixin;
+package user11681.phormat.asm.mixin;
 
 import java.util.regex.Pattern;
 import net.minecraft.util.Formatting;

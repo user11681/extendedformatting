@@ -1,4 +1,4 @@
-package user11681.extendedformatting.asm.access;
+package user11681.phormat.asm.access;
 
 import java.util.List;
 import net.fabricmc.api.EnvType;
