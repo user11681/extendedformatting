@@ -13,7 +13,17 @@
     "license": "GPL-3.0",
     "icon": "assets/extendedformatting/icon.png",
     "environment": "*",
-    "entrypoints": {},
+    "entrypoints": {
+        "mm:early_risers": [
+            "user11681.extendedformatting.ExtendedFormatting"
+        ],
+        "preLaunch": [
+            "user11681.extendedformatting.ExtendedFormatting$Postinit"
+        ],
+        "extendedformatting": [
+            "user11681.extendedformatting.Test::init"
+        ]
+    },
     "mixins": [
         "extendedformatting.mixins.json"
     ],

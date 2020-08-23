@@ -4,11 +4,10 @@
     "package": "user11681.extendedformatting.asm.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-        "formatting.FormattingMixin",
-        "formatting.StyleMixin",
-        "formatting.TextRendererDrawerMixin"
-    ],
-    "client": [
+        "FormattingMixin",
+        "StyleMixin",
+        "TextRendererDrawerAccess",
+        "TextRendererDrawerMixin"
     ],
     "injectors": {
         "defaultRequire": 1
