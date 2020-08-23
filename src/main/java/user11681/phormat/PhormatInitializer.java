@@ -20,7 +20,7 @@ public class PhormatInitializer implements Runnable {
     public void run() {
         initializing = true;
 
-        for (final EntrypointContainer<Runnable> entrypoint : FabricLoader.getInstance().getEntrypointContainers("extendedformatting", Runnable.class)) {
+        for (final EntrypointContainer<Runnable> entrypoint : FabricLoader.getInstance().getEntrypointContainers("phormat", Runnable.class)) {
             entrypoint.getEntrypoint().run();
         }
 

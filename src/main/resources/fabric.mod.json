@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "id": "extendedformatting",
+    "id": "phormat",
     "version": "0.0.0",
     "name": "extended formatting",
     "description": "a library for adding formatting options",
@@ -8,10 +8,10 @@
         "user11681"
     ],
     "contact": {
-        "repo": "https://github.com/user11681/extendedformatting"
+        "repo": "https://github.com/user11681/phormat"
     },
     "license": "GPL-3.0",
-    "icon": "assets/extendedformatting/icon.png",
+    "icon": "assets/phormat/icon.png",
     "environment": "*",
     "entrypoints": {
         "mm:early_risers": [
@@ -22,9 +22,12 @@
         ]
     },
     "mixins": [
-        "extendedformatting.mixins.json"
+        "phormat.mixins.json"
     ],
     "depends": {
         "fabricloader": "*"
+    },
+    "custom": {
+        "modmenu:api": true
     }
 }

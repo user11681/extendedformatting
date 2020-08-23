@@ -54,7 +54,7 @@ public class Phormatting {
 
     private Phormatting(final String name, final char code) {
         if (!PhormatInitializer.initializing) {
-            throw new IllegalStateException("All custom formats should be constructed in the \"extendedformatting\" entrypoint.");
+            throw new IllegalStateException("All custom formattings should be constructed in the \"phormat\" entrypoint.");
         }
 
         if (PhormatInitializer.names.contains(name)) {
