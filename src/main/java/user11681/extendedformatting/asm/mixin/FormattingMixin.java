@@ -4,10 +4,10 @@ import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import user11681.extendedformatting.Format;
-import user11681.extendedformatting.asm.access.FormattingAccess;
+import user11681.extendedformatting.asm.access.CustomFormattingAccess;
 
 @Mixin(Formatting.class)
-public abstract class FormattingMixin implements FormattingAccess {
+public abstract class FormattingMixin implements CustomFormattingAccess {
     @Unique
     private final Formatting self = (Formatting) (Object) this;
 
@@ -15,12 +15,12 @@ public abstract class FormattingMixin implements FormattingAccess {
     private Format format;
 
     @Unique
-    public boolean modded;
+    public boolean custom;
 
     @Override
     @Unique
-    public boolean isModded() {
-        return this.modded;
+    public boolean isCustom() {
+        return this.custom;
     }
 
     @Override
@@ -33,6 +33,7 @@ public abstract class FormattingMixin implements FormattingAccess {
     @Unique
     public void setFormat(final Format format) {
         this.format = format;
+        this.custom = true;
     }
 
     @Override

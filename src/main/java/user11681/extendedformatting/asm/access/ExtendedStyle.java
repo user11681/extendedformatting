@@ -4,18 +4,18 @@ import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 
-public interface StyleAccess {
+public interface ExtendedStyle {
     boolean hasCustomFormatting(Formatting formatting);
 
     void addCustomFormatting(Formatting formatting);
 
     void addCustomFormattings(Formatting... formattings);
 
-    void addCustomFormattings(FormattingAccess... formattings);
+    void addCustomFormattings(CustomFormattingAccess... formattings);
 
-    void addCustomFormatting(FormattingAccess formatting);
+    void addCustomFormatting(CustomFormattingAccess formatting);
 
-    ReferenceArrayList<FormattingAccess> getCustomFormattings();
+    ReferenceArrayList<CustomFormattingAccess> getCustomFormattings();
 
     Style cast();
 }
