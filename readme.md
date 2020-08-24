@@ -38,6 +38,7 @@ public class Example {
 `com/example/MyFormatter.java`:
 ```java
 public class MyFormatter extends Phormatter {
+    @Override
     public void format(TextRendererDrawerAccess drawer,
                        Style style,
                        int i,
