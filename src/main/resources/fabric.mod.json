@@ -28,6 +28,7 @@
         "fabricloader": "*"
     },
     "custom": {
-        "modmenu:api": true
+        "modmenu:api": true,
+        "phormat:init": "user11681.Test"
     }
 }

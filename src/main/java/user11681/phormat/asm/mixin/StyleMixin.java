@@ -1,6 +1,12 @@
 package user11681.phormat.asm.mixin;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
+import java.lang.reflect.Type;
 import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,26 +30,30 @@ public abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public boolean hasCustomFormatting(final Formatting format) {
-        return this.customFormattings.contains(format);
-    }
-
-    @Override
-    @Unique
-    public void addCustomFormatting(final Formatting format) {
-        this.customFormattings.add(PhormatAccess.class.cast(format));
+    public boolean hasCustomFormatting(final Formatting formatting) {
+        return this.customFormattings.contains(formatting);
     }
 
     @Override
     @Unique
     public void addCustomFormattings(final Formatting... formattings) {
-        this.customFormattings.addElements(this.customFormattings.size(), PhormatAccess[].class.cast(formattings));
+        for (final Formatting formatting : formattings) {
+            this.addCustomFormatting((PhormatAccess) (Object) formatting);
+        }
     }
 
     @Override
     @Unique
     public void addCustomFormattings(final PhormatAccess... formattings) {
-        this.customFormattings.addElements(this.customFormattings.size(), formattings);
+        for (final PhormatAccess formatting : formattings) {
+            this.addCustomFormatting(formatting);
+        }
+    }
+
+    @Override
+    @Unique
+    public void addCustomFormatting(final Formatting formatting) {
+        this.addCustomFormatting((PhormatAccess) (Object) formatting);
     }
 
     @Override
@@ -77,7 +87,49 @@ public abstract class StyleMixin implements ExtendedStyle {
 
         for (final PhormatAccess format : PhormatAccess[].class.cast(formattings)) {
             if (format.isCustom()) {
-                style.customFormattings.add(format);
+                style.addCustomFormatting(format);
+            }
+        }
+    }
+
+    @Mixin(Style.Serializer.class)
+    public static class SerializerMixin {
+        @Inject(method = "deserialize",
+                at = @At(value = "NEW",
+                         target = "net/minecraft/text/Style"))
+        public void deserializeCustomFormatting(final JsonElement jsonElement, final Type type, final JsonDeserializationContext jsonDeserializationContext, final CallbackInfoReturnable<Style> info) {
+            final ExtendedStyle style = (ExtendedStyle) info.getReturnValue();
+            final JsonObject object = jsonElement.getAsJsonObject();
+
+            if (object.has("phormat")) {
+                final JsonArray phormattings = object.getAsJsonArray("phormat");
+
+                for (final JsonElement phormat : phormattings) {
+                    style.addCustomFormatting(Formatting.byName(phormat.getAsString()));
+                }
+            }
+        }
+
+        @Inject(method = "serialize",
+                at = @At("RETURN"),
+                cancellable = true)
+        public void serializeCustomFormatting(final Style style, final Type type, final JsonSerializationContext jsonSerializationContext, final CallbackInfoReturnable<JsonElement> info) {
+            JsonObject object = (JsonObject) info.getReturnValue();
+
+            if (object == null) {
+                object = new JsonObject();
+
+                info.setReturnValue(object);
+            } else {
+                final JsonArray phormattings = new JsonArray();
+
+                for (final PhormatAccess phormat : ((ExtendedStyle) style).getCustomFormattings()) {
+                    if (phormat.isCustom()) {
+                        phormattings.add(phormat.cast().getName());
+                    }
+                }
+
+                object.add("phormat", phormattings);
             }
         }
     }

@@ -4,14 +4,17 @@
     "package": "user11681.phormat.asm.mixin",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-        "FormattingPatternAccess",
         "FormattingMixin",
-        "StyleMixin"
+        "FormattingPatternAccess",
+        "StyleMixin",
+        "StyleMixin$SerializerMixin",
+        "TextColorMixin"
     ],
     "client": [
         "TextRendererDrawerMixin"
     ],
     "injectors": {
-        "defaultRequire": 1
+        "defaultRequire": 1,
+        "maxShiftBy": 5
     }
 }

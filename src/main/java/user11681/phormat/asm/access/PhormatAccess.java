@@ -6,7 +6,7 @@ import user11681.phormat.Phormatting;
 public interface PhormatAccess {
     boolean isCustom();
 
-    Phormatting getFormat();
+    Phormatting getPhormatting();
 
     void setFormat(Phormatting format);
 

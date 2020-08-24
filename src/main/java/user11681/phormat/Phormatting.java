@@ -6,7 +6,8 @@ import net.minecraft.util.Formatting;
 public class Phormatting {
     public final String name;
 
-    public Phormatter formatter;
+    protected Phormatter formatter;
+    protected ColorFunction colorFunction;
 
     Formatting formatting;
 
@@ -28,30 +29,6 @@ public class Phormatting {
         PhormatInitializer.primaryAdder.addEnum(name, name, code, modifier, colorIndex, color);
     }
 
-    public Phormatting(final String name, final char code, final int colorIndex, @Nullable final Integer color, final Phormatter formatter) {
-        this(name, code, formatter);
-
-        PhormatInitializer.colorAdder.addEnum(name, name, code, colorIndex, color);
-    }
-
-    public Phormatting(final String name, final char code, final boolean modifier, final Phormatter formatter) {
-        this(name, code, formatter);
-
-        PhormatInitializer.modifierAdder.addEnum(name, name, code, modifier);
-    }
-
-    public Phormatting(final String name, final char code, final boolean modifier, final int colorIndex, @Nullable final Integer color, final Phormatter formatter) {
-        this(name, code, formatter);
-
-        PhormatInitializer.primaryAdder.addEnum(name, name, code, modifier, colorIndex, color);
-    }
-
-    private Phormatting(final String name, final char code, final Phormatter formatter) {
-        this(name, code);
-
-        this.formatter = formatter;
-    }
-
     private Phormatting(final String name, final char code) {
         if (!PhormatInitializer.initializing) {
             throw new IllegalStateException("All custom formattings should be constructed in classes referenced in the \"phormat:init\" custom value.");
@@ -64,7 +41,26 @@ public class Phormatting {
         this.name = name;
 
         PhormatInitializer.formatToCode.put(this, code);
+    }
 
+    public Phormatting formatter(final Phormatter formatter) {
+        this.formatter = formatter;
+
+        return this;
+    }
+
+    public Phormatting color(final ColorFunction colorFunction) {
+        this.colorFunction = colorFunction;
+
+        return this;
+    }
+
+    public Phormatter getFormatter() {
+        return this.formatter;
+    }
+
+    public ColorFunction getColorFunction() {
+        return this.colorFunction;
     }
 
     public Formatting formatting() {

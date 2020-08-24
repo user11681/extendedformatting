@@ -104,7 +104,7 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
 
         for (final PhormatAccess formatting : ((ExtendedStyle) style).getCustomFormattings()) {
             if (formatting.isCustom()) {
-                formatter = formatting.getFormat().formatter;
+                formatter = formatting.getPhormatting().getFormatter();
 
                 if (formatter != null) {
                     formatter.format(this, style, i, j, storage, glyph, glyphRenderer, isBold, red, green, blue, alpha, advance);
