@@ -153,6 +153,19 @@ public abstract class StyleMixin implements ExtendedStyle {
         }
     }
 
+    @Inject(method = "withParent", at = @At("TAIL"))
+    public void withParent(final Style parent, final CallbackInfoReturnable<Style> info) {
+        if (parent != Style.EMPTY) {
+            final StyleMixin child = (StyleMixin) (Object) info.getReturnValue();
+
+            for (final PhormatAccess phormatting : ((StyleMixin) (Object) parent).customFormattings) {
+                if (!child.customFormattings.contains(phormatting)) {
+                    child.customFormattings.add(phormatting);
+                }
+            }
+        }
+    }
+
     @Mixin(Style.Serializer.class)
     public static class SerializerMixin {
         @Inject(method = "deserialize",
