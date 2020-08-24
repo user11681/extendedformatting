@@ -7,8 +7,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import java.lang.reflect.Type;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Style;
+import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -68,8 +75,62 @@ public abstract class StyleMixin implements ExtendedStyle {
         return (Style) (Object) this;
     }
 
+    @Inject(method = "withColor(Lnet/minecraft/text/TextColor;)Lnet/minecraft/text/Style;",
+            at = @At("RETURN"))
+    public void withColor(final @Nullable TextColor color, final CallbackInfoReturnable<Style> info) {
+        transferPhormats(info.getReturnValue());
+    }
+
+    @Inject(method = "withBold",
+            at = @At("RETURN"))
+    public void withBold(final @Nullable Boolean bold, final CallbackInfoReturnable<Style> info) {
+        transferPhormats(info.getReturnValue());
+    }
+
+    @Inject(method = "withItalic",
+            at = @At("RETURN"))
+    public void withItalic(final @Nullable Boolean italic, final CallbackInfoReturnable<Style> info) {
+        transferPhormats(info.getReturnValue());
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Inject(method = "method_30938",
+            at = @At("RETURN"))
+    public void method_30938(final @Nullable Boolean boolean_, final CallbackInfoReturnable<Style> info) {
+        transferPhormats(info.getReturnValue());
+    }
+
+    @Inject(method = "withClickEvent",
+            at = @At("RETURN"))
+    public void withClickEvent(final @Nullable ClickEvent clickEvent, final CallbackInfoReturnable<Style> info) {
+        transferPhormats(info.getReturnValue());
+    }
+
+    @Inject(method = "withHoverEvent",
+            at = @At("RETURN"))
+    public void withHoverEvent(final @Nullable HoverEvent hoverEvent, final CallbackInfoReturnable<Style> info) {
+        transferPhormats(info.getReturnValue());
+    }
+
+    @Inject(method = "withInsertion",
+            at = @At("RETURN"))
+    public void withInsertion(final @Nullable String insertion, final CallbackInfoReturnable<Style> info) {
+        transferPhormats(info.getReturnValue());
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Inject(method = "withFont",
+            at = @At("RETURN"))
+    public void withFont(final @Nullable Identifier font, final CallbackInfoReturnable<Style> info) {
+        transferPhormats(info.getReturnValue());
+    }
+
+    private static void transferPhormats(final Style style) {
+        ((StyleMixin) (Object) style).addCustomFormattings(((StyleMixin) (Object) style).customFormattings.toArray(new PhormatAccess[0]));
+    }
+
     @Inject(method = {"withFormatting(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;", "withExclusiveFormatting"},
-            at = @At(value = "RETURN"))
+            at = @At(value = "TAIL"))
     public void addCustomFormatting(final Formatting formatting, final CallbackInfoReturnable<Style> info) {
         final StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
 
@@ -81,7 +142,7 @@ public abstract class StyleMixin implements ExtendedStyle {
     }
 
     @Inject(method = "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;",
-            at = @At(value = "RETURN"))
+            at = @At(value = "TAIL"))
     public void addCustomFormatting(final Formatting[] formattings, final CallbackInfoReturnable<Style> info) {
         final StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
 
