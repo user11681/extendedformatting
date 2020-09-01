@@ -8,7 +8,8 @@
         "FormattingPatternAccess",
         "StyleMixin",
         "StyleMixin$SerializerMixin",
-        "TextColorMixin"
+        "TextColorMixin",
+        "TMix"
     ],
     "client": [
         "TextRendererDrawerMixin"

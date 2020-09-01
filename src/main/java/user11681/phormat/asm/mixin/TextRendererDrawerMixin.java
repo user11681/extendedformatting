@@ -87,7 +87,7 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
     public abstract void invokeAddRectangle(GlyphRenderer.Rectangle rectangle);
 
     @Inject(method = "accept(ILnet/minecraft/text/Style;I)Z", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    public void formatCustom(final int i,
+    public void formatCustom(final int charIndex,
                              final Style style,
                              final int j,
                              final CallbackInfoReturnable<Boolean> info,
@@ -107,7 +107,7 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
                 formatter = formatting.getPhormatting().getFormatter();
 
                 if (formatter != null) {
-                    formatter.format(this, style, i, j, storage, glyph, glyphRenderer, isBold, red, green, blue, alpha, advance);
+                    formatter.format(this, style, charIndex, j, storage, glyph, glyphRenderer, isBold, red, green, blue, alpha, advance);
                 }
             }
         }

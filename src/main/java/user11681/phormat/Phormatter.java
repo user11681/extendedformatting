@@ -9,7 +9,7 @@ import user11681.phormat.asm.access.TextRendererDrawerAccess;
 public abstract class Phormatter {
     public abstract void format(TextRendererDrawerAccess drawer,
                                 Style style,
-                                int i,
+                                int charIndex,
                                 int j,
                                 FontStorage storage,
                                 Glyph glyph,
