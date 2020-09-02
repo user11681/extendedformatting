@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.Reference2CharOpenHashMap;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
+import user11681.smartentrypoints.SmartEntrypoints;
 
 public class PhormatInitializer implements Runnable {
     static Reference2CharOpenHashMap<Phormatting> formatToCode = new Reference2CharOpenHashMap<>();
@@ -20,23 +21,7 @@ public class PhormatInitializer implements Runnable {
     public void run() {
         initializing = true;
 
-        for (final ModContainer mod : FabricLoader.getInstance().getAllMods()) {
-            final CustomValue initValue = mod.getMetadata().getCustomValue("phormat:init");
-
-            if (initValue != null) {
-                if (tryLoadClass(mod, initValue)) {
-                    if (initValue.getType() == CustomValue.CvType.ARRAY) {
-                        for (final CustomValue element : initValue.getAsArray()) {
-                            if (tryLoadClass(mod, element)) {
-                                throw new IllegalArgumentException(String.format("a non-string value was found in the phormat:init array in the Fabric configuration file of mod %s", mod.getMetadata().getName()));
-                            }
-                        }
-                    } else {
-                        throw new IllegalArgumentException(String.format("the value of phormat:init in the Fabric configuration file of mod %s is not a binary class name or an array of binary class names", mod.getMetadata().getName()));
-                    }
-                }
-            }
-        }
+        SmartEntrypoints.executeOptionalEntrypoint("phormat:init", Runnable.class, Runnable::run);
 
         initializing = false;
 

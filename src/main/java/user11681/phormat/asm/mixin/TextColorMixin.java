@@ -12,7 +12,7 @@ import user11681.phormat.ColorFunction;
 import user11681.phormat.asm.access.PhormatAccess;
 
 @Mixin(TextColor.class)
-public abstract class TextColorMixin {
+abstract class TextColorMixin {
     @Shadow
     @Final
     private int rgb;

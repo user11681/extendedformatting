@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import user11681.phormat.Phormatter;
-import user11681.phormat.asm.access.PhormatAccess;
 import user11681.phormat.asm.access.ExtendedStyle;
+import user11681.phormat.asm.access.PhormatAccess;
 import user11681.phormat.asm.access.TextRendererDrawerAccess;
 
 @Environment(EnvType.CLIENT)
@@ -102,7 +102,7 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
                              final float advance) {
         Phormatter formatter;
 
-        for (final PhormatAccess formatting : ((ExtendedStyle) style).getCustomFormattings()) {
+        for (final PhormatAccess formatting : ((ExtendedStyle) style).getPhormattings()) {
             if (formatting.isCustom()) {
                 formatter = formatting.getPhormatting().getFormatter();
 
@@ -112,4 +112,6 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
             }
         }
     }
+
+    private static int frames;
 }

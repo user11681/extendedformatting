@@ -1,21 +1,30 @@
 package user11681.phormat.asm.access;
 
-import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import java.util.Collection;
 import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 
 public interface ExtendedStyle {
-    boolean hasCustomFormatting(Formatting formatting);
+    boolean hasPhormatting(PhormatAccess formatting);
 
-    void addCustomFormatting(Formatting formatting);
+    boolean hasPhormatting(Formatting formatting);
 
-    void addCustomFormattings(Formatting... formattings);
+    ReferenceOpenHashSet<PhormatAccess> getPhormattings();
 
-    void addCustomFormattings(PhormatAccess... formattings);
+    void transferPhormats(Style to);
 
-    void addCustomFormatting(PhormatAccess formatting);
+    void addPhormatting(Formatting formatting);
 
-    ReferenceArrayList<PhormatAccess> getCustomFormattings();
+    void addFormattings(Collection<Formatting> formattings);
+
+    void addPhormattings(Collection<PhormatAccess> formattings);
+
+    void addPhormattings(Formatting... formattings);
+
+    void addPhormattings(PhormatAccess... formattings);
+
+    void addPhormatting(PhormatAccess formatting);
 
     Style cast();
 }

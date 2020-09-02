@@ -8,13 +8,13 @@
         "FormattingPatternAccess",
         "StyleMixin",
         "StyleMixin$SerializerMixin",
-        "TextColorMixin",
-        "TMix"
+        "TextColorMixin"
     ],
     "client": [
         "TextRendererDrawerMixin"
     ],
     "injectors": {
-        "defaultRequire": 1
+        "defaultRequire": 1,
+        "maxShiftBy": 5
     }
 }

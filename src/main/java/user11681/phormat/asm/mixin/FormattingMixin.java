@@ -16,7 +16,7 @@ import user11681.phormat.Phormatting;
 import user11681.phormat.asm.access.PhormatAccess;
 
 @Mixin(Formatting.class)
-public abstract class FormattingMixin implements PhormatAccess {
+abstract class FormattingMixin implements PhormatAccess {
     @Unique
     private final Formatting self = (Formatting) (Object) this;
 

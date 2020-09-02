@@ -28,10 +28,6 @@
         "fabricloader": "*"
     },
     "custom": {
-        "modmenu:api": true,
-        "phormat:init": [
-            "user11681.phormat.PhormatTest",
-            "user11681.commonformatting.CommonFormatting"
-        ]
+        "modmenu:api": true
     }
 }
