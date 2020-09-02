@@ -24,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import user11681.phormat.asm.access.ExtendedStyle;
 import user11681.phormat.asm.access.PhormatAccess;
@@ -35,10 +34,10 @@ abstract class StyleMixin implements ExtendedStyle {
     private final ReferenceOpenHashSet<PhormatAccess> phormattings = new ReferenceOpenHashSet<>(new PhormatAccess[5], 0, 0, 0.75F);
 
     @Unique
-    private Formatting switchFormatting;
+    private static Formatting switchFormatting;
 
     @Unique
-    private Boolean previousObfuscated;
+    private static Boolean previousObfuscated;
 
     @Override
     @Unique
@@ -185,11 +184,10 @@ abstract class StyleMixin implements ExtendedStyle {
         }
     }
 
-    @Redirect(method = {"withFormatting(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;", "withExclusiveFormatting", "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;"},
-              at = @At(value = "INVOKE",
-                       target = "Lnet/minecraft/util/Formatting;ordinal()I"))
-    public int hackOrdinal(final Formatting formatting) {
-        return ((PhormatAccess) (Object) (this.switchFormatting = formatting)).isCustom() && !formatting.isColor() ? Formatting.OBFUSCATED.ordinal() : formatting.ordinal();
+    // invoked with ASM
+    @SuppressWarnings({"unused", "RedundantSuppression"})
+    private static int phormat_hackOrdinal(final Formatting formatting) {
+        return ((PhormatAccess) (Object) (switchFormatting = formatting)).isCustom() && !formatting.isColor() ? Formatting.OBFUSCATED.ordinal() : formatting.ordinal();
     }
 
     @ModifyVariable(method = {"withFormatting(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;", "withExclusiveFormatting", "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;"},
@@ -198,7 +196,7 @@ abstract class StyleMixin implements ExtendedStyle {
                              ordinal = 0),
                     ordinal = 4)
     public Boolean saveObfuscated(final Boolean previous) {
-        return this.previousObfuscated = previous;
+        return previousObfuscated = previous;
     }
 
     @ModifyVariable(method = {"withFormatting(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;", "withExclusiveFormatting", "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;"},
@@ -206,7 +204,7 @@ abstract class StyleMixin implements ExtendedStyle {
                              ordinal = 1),
                     ordinal = 4)
     public Boolean fixObfuscatedVarargs(final Boolean previous) {
-        return this.switchFormatting == Formatting.OBFUSCATED || this.previousObfuscated == Boolean.TRUE;
+        return switchFormatting == Formatting.OBFUSCATED || previousObfuscated == Boolean.TRUE;
     }
 
     @Inject(method = "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;",
