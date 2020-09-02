@@ -203,7 +203,7 @@ abstract class StyleMixin implements ExtendedStyle {
                     at = @At(value = "STORE",
                              ordinal = 1),
                     ordinal = 4)
-    public Boolean fixObfuscatedVarargs(final Boolean previous) {
+    public Boolean fixObfuscated(final Boolean previous) {
         return switchFormatting == Formatting.OBFUSCATED || previousObfuscated == Boolean.TRUE;
     }
 
