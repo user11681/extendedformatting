@@ -31,7 +31,26 @@ repositories {
     }
 
     maven {
-        name "Cotton"
+        url "https://maven.blamejared.com"
+    }
+
+    maven {
+        url "https://mod-buildcraft.com/maven"
+    }
+
+    maven {
+        url "https://dl.bintray.com/zundrel/wrenchable"
+    }
+
+    maven {
+        url "https://maven.dblsaiko.net/"
+    }
+
+    maven {
+        url "https://dl.bintray.com/earthcomputer/mods"
+    }
+
+    maven {
         url "https://server.bbkr.space/artifactory/libs-release"
     }
 }
@@ -50,7 +69,7 @@ dependencies {
 
 
 configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+//    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 processResources {

@@ -1,5 +1,7 @@
 package user11681.phormat.asm.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Final;
@@ -42,6 +44,7 @@ abstract class TextColorMixin {
         }
     }
 
+    @Environment(EnvType.CLIENT)
     @Inject(method = "getRgb",
             at = @At("HEAD"),
             cancellable = true)
