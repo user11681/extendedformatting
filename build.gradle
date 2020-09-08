@@ -50,9 +50,9 @@ repositories {
         url "https://dl.bintray.com/earthcomputer/mods"
     }
 
-    maven {
-        url "https://server.bbkr.space/artifactory/libs-release"
-    }
+//    maven {
+//        url "https://server.bbkr.space/artifactory/libs-release"
+//    }
 }
 
 dependencies {
