@@ -1,13 +1,10 @@
 package user11681.phormat.asm.mixin;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -20,14 +17,11 @@ abstract class TextColorMixin {
     @Final
     private int rgb;
 
-    @Unique
-    private int previousColor = this.rgb;
+    private int phormat_previousColor = this.rgb;
 
-    @Unique
-    private boolean hasColorFunction;
+    private boolean phormat_hasColorFunction;
 
-    @Unique
-    private ColorFunction colorFunction;
+    private ColorFunction phormat_colorFunction;
 
     @Inject(method = "fromFormatting",
             at = @At("RETURN"),
@@ -42,20 +36,10 @@ abstract class TextColorMixin {
                 final ColorFunction colorFunction = formattingAccess.getPhormatting().getColorFunction();
 
                 if (colorFunction != null) {
-                    color.colorFunction = colorFunction;
-                    color.hasColorFunction = true;
+                    color.phormat_colorFunction = colorFunction;
+                    color.phormat_hasColorFunction = true;
                 }
             }
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    @Inject(method = "getRgb",
-            at = @At("HEAD"),
-            cancellable = true)
-    public void applyColorFunction(final CallbackInfoReturnable<Integer> info) {
-        if (this.hasColorFunction) {
-            info.setReturnValue(this.previousColor = this.colorFunction.apply(this.rgb));
         }
     }
 
@@ -63,8 +47,8 @@ abstract class TextColorMixin {
             at = @At("HEAD"),
             cancellable = true)
     public void matchHexCode(final CallbackInfoReturnable<String> info) {
-        if (this.hasColorFunction) {
-            info.setReturnValue(Integer.toHexString(this.previousColor));
+        if (this.phormat_hasColorFunction) {
+            info.setReturnValue(Integer.toHexString(this.phormat_previousColor));
         }
     }
 }
