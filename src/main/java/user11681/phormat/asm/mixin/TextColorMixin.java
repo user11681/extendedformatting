@@ -22,6 +22,7 @@ abstract class TextColorMixin {
 
     private boolean phormat_hasColorFunction;
 
+    @SuppressWarnings({"unused", "RedundantSuppression"})
     private ColorFunction phormat_colorFunction;
 
     @Inject(method = "fromFormatting",
