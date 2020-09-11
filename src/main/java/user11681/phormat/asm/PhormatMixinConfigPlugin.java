@@ -4,12 +4,17 @@ import java.util.List;
 import java.util.Set;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.VarInsnNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
@@ -67,18 +72,21 @@ public class PhormatMixinConfigPlugin implements IMixinConfigPlugin {
                 if (getRgb.equals(method.name)) {
                     final String rgb = resolver.mapFieldName("intermediary", "class_5251", "field_24364", "I");
 
-                    final Label endIf = new Label();
+                    final InsnList insertion = new InsnList();
+                    final LabelNode endIf = new LabelNode();
 
-                    method.visitJumpInsn(Opcodes.IFEQ, endIf);
-                    method.visitVarInsn(Opcodes.ALOAD, 0);
-                    method.visitVarInsn(Opcodes.ALOAD, 0);
-                    method.visitFieldInsn(Opcodes.GETFIELD, targetClassName, "phormat_colorFunction", "Luser11681/phormat/ColorFunction;");
-                    method.visitFieldInsn(Opcodes.GETFIELD, targetClassName, rgb, "I");
-                    method.visitMethodInsn(Opcodes.INVOKEINTERFACE, "user11681/phormat/ColorFunction", "apply", "(I)I", true);
-                    method.visitInsn(Opcodes.DUP);
-                    method.visitFieldInsn(Opcodes.PUTFIELD, targetClassName, "phormat_previousColor", "I");
-                    method.visitInsn(Opcodes.IRETURN);
-                    method.visitLabel(endIf);
+                    insertion.add(new JumpInsnNode(Opcodes.IFEQ, endIf));
+                    insertion.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                    insertion.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                    insertion.add(new FieldInsnNode(Opcodes.GETFIELD, targetClassName, "phormat_colorFunction", "Luser11681/phormat/ColorFunction;"));
+                    insertion.add(new FieldInsnNode(Opcodes.GETFIELD, targetClassName, rgb, "I"));
+                    insertion.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "user11681/phormat/ColorFunction", "apply", "(I)I", true));
+                    insertion.add(new InsnNode(Opcodes.DUP));
+                    insertion.add(new FieldInsnNode(Opcodes.PUTFIELD, targetClassName, "phormat_previousColor", "I"));
+                    insertion.add(new InsnNode(Opcodes.IRETURN));
+                    insertion.add(endIf);
+
+                    method.instructions.insertBefore(method.instructions.getFirst(), insertion);
 
                     break;
                 }
