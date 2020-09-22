@@ -1,4 +1,4 @@
 #!/bin/bash
-./version
+# ./version
 ./gradlew clean
 ./gradlew build

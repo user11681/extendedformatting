@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.objects.Reference2CharOpenHashMap;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
-import user11681.smartentrypoints.SmartEntrypoints;
+import user11681.dynamicentry.DynamicEntry;
 
 public class PhormatInitializer implements Runnable {
     static Reference2CharOpenHashMap<Phormatting> formatToCode = new Reference2CharOpenHashMap<>();
@@ -21,7 +21,7 @@ public class PhormatInitializer implements Runnable {
     public void run() {
         initializing = true;
 
-        SmartEntrypoints.executeOptionalEntrypoint("phormat:init", Runnable.class, Runnable::run);
+        DynamicEntry.executeOptionalEntrypoint("phormat:init", Runnable.class, Runnable::run);
 
         initializing = false;
 
