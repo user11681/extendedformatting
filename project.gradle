@@ -2,5 +2,5 @@ version = "0.0.0"
 
 dependencies {
     modApi include("${project.fabricASM}")
-    modApi include("${project.smartEntrypoints}")
+    modApi include("${project.dynamicEntry}")
 }
