@@ -1,15 +1,15 @@
 package user11681.phormat;
 
-import javax.annotation.Nullable;
 import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
+import user11681.phormat.internal.PhormatInitializer;
 
 public class Phormatting {
     public final String name;
 
-    protected Phormatter formatter;
-    protected ColorFunction colorFunction;
-
-    Formatting formatting;
+    public Phormatter formatter;
+    public ColorFunction colorFunction;
+    public Formatting formatting;
 
     public Phormatting(final String name, final char code, final int colorIndex, @Nullable final Integer color) {
         this(name, code);
@@ -55,14 +55,17 @@ public class Phormatting {
         return this;
     }
 
+    @Deprecated // for removal; use the field.
     public Phormatter getFormatter() {
         return this.formatter;
     }
 
+    @Deprecated // for removal; use the field.
     public ColorFunction getColorFunction() {
         return this.colorFunction;
     }
 
+    @Deprecated // for removal; use the field.
     public Formatting formatting() {
         return this.formatting;
     }

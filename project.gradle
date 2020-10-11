@@ -1,6 +1,7 @@
-version = "0.0.2"
+version = "0.1.0"
 
 dependencies {
-    modApi include("${project.fabricASM}")
-    modApi include("${project.dynamicEntry}")
+    modApi(include("${project.dynamicEntry}"))
+    modApi(include("${project.fabricASM}"))
+    modApi(include("${project.fabricASMTools}"))
 }

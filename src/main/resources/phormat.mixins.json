@@ -3,10 +3,10 @@
     "minVersion": "0.8",
     "package": "user11681.phormat.asm.mixin",
     "compatibilityLevel": "JAVA_8",
-    "plugin": "user11681.phormat.asm.PhormatMixinConfigPlugin",
+    "plugin": "user11681.phormat.asm.PhormatTransformer",
     "mixins": [
         "FormattingMixin",
-        "FormattingPatternAccess",
+        "FormattingPatternMixin",
         "StyleMixin",
         "StyleMixin$SerializerMixin",
         "TextColorMixin"

@@ -15,10 +15,7 @@
     "environment": "*",
     "entrypoints": {
         "mm:early_risers": [
-            "user11681.phormat.PhormatInitializer"
-        ],
-        "preLaunch": [
-            "user11681.phormat.PhormatPostinitializer"
+            "user11681.phormat.internal.PhormatInitializer"
         ]
     },
     "mixins": [

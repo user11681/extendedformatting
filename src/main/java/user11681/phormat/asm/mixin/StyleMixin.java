@@ -141,9 +141,9 @@ abstract class StyleMixin implements ExtendedStyle {
     }
 
     @Environment(EnvType.CLIENT)
-    @Inject(method = "method_30938",
+    @Inject(method = "withUnderline",
             at = @At("RETURN"))
-    public void method_30938(final Boolean boolean_, final CallbackInfoReturnable<Style> info) {
+    public void withUnderline(final Boolean boolean_, final CallbackInfoReturnable<Style> info) {
         this.transferPhormats(info.getReturnValue());
     }
 
