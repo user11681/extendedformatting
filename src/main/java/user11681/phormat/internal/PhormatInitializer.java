@@ -22,7 +22,7 @@ public class PhormatInitializer implements Runnable {
     public void run() {
         initializing = true;
 
-        DynamicEntry.maybeExecute("phormat:init", Runnable.class, Runnable::run);
+        DynamicEntry.tryExecute("phormat:init", Runnable.class, Runnable::run);
 
         initializing = false;
 
