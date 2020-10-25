@@ -13,7 +13,7 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-import user11681.fabricasmtools.TransformerPlugin;
+import user11681.fabricasmtools.plugin.TransformerPlugin;
 
 public class PhormatTransformer extends TransformerPlugin {
     @Override
