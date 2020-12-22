@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import user11681.phormat.ColorFunction;
-import user11681.phormat.asm.access.PhormatAccess;
+import user11681.phormat.api.ColorFunction;
+import user11681.phormat.asm.access.FormattingAccess;
 
 @Mixin(TextColor.class)
 abstract class TextColorMixin {
@@ -25,17 +25,16 @@ abstract class TextColorMixin {
     @SuppressWarnings({"unused", "RedundantSuppression"})
     private ColorFunction phormat_colorFunction;
 
-    @Inject(method = "fromFormatting",
-            at = @At("RETURN"),
-            cancellable = true)
+    @SuppressWarnings("ConstantConditions")
+    @Inject(method = "fromFormatting", at = @At("RETURN"), cancellable = true)
     private static void setColorFunction(final Formatting formatting, final CallbackInfoReturnable<TextColor> info) {
         final TextColorMixin color = (TextColorMixin) (Object) info.getReturnValue();
 
         if (color != null) {
-            final PhormatAccess formattingAccess = (PhormatAccess) (Object) formatting;
+            final FormattingAccess formattingAccess = (FormattingAccess) (Object) formatting;
 
             if (formattingAccess.isCustom()) {
-                final ColorFunction colorFunction = formattingAccess.getPhormatting().getColorFunction();
+                final ColorFunction colorFunction = formattingAccess.getColorFunction();
 
                 if (colorFunction != null) {
                     color.phormat_colorFunction = colorFunction;
@@ -45,9 +44,7 @@ abstract class TextColorMixin {
         }
     }
 
-    @Inject(method = "getHexCode",
-            at = @At("HEAD"),
-            cancellable = true)
+    @Inject(method = "getHexCode", at = @At("HEAD"), cancellable = true)
     public void matchHexCode(final CallbackInfoReturnable<String> info) {
         if (this.phormat_hasColorFunction) {
             info.setReturnValue(Integer.toHexString(this.phormat_previousColor));

@@ -12,18 +12,14 @@
     },
     "license": "GPL-3.0",
     "icon": "assets/phormat/icon.png",
-    "environment": "*",
     "entrypoints": {
         "mm:early_risers": [
-            "user11681.phormat.internal.PhormatInitializer"
+            "user11681.phormat.impl.PhormatInitializer"
         ]
     },
     "mixins": [
         "phormat.mixins.json"
     ],
-    "depends": {
-        "fabricloader": "*"
-    },
     "custom": {
         "modmenu:api": true
     }

@@ -6,11 +6,11 @@ import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 
 public interface ExtendedStyle {
-    boolean hasPhormatting(PhormatAccess formatting);
+    boolean hasPhormatting(FormattingAccess formatting);
 
     boolean hasPhormatting(Formatting formatting);
 
-    ReferenceOpenHashSet<PhormatAccess> getPhormattings();
+    ReferenceOpenHashSet<FormattingAccess> getPhormattings();
 
     void transferPhormats(Style to);
 
@@ -18,13 +18,13 @@ public interface ExtendedStyle {
 
     void addFormattings(Collection<Formatting> formattings);
 
-    void addPhormattings(Collection<PhormatAccess> formattings);
+    void addPhormattings(Collection<FormattingAccess> formattings);
 
     void addPhormattings(Formatting... formattings);
 
-    void addPhormattings(PhormatAccess... formattings);
+    void addPhormattings(FormattingAccess... formattings);
 
-    void addPhormatting(PhormatAccess formatting);
+    void addPhormatting(FormattingAccess formatting);
 
     Style cast();
 }

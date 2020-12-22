@@ -17,9 +17,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import user11681.phormat.Phormatter;
+import user11681.phormat.api.format.TextFormatter;
 import user11681.phormat.asm.access.ExtendedStyle;
-import user11681.phormat.asm.access.PhormatAccess;
+import user11681.phormat.asm.access.FormattingAccess;
 import user11681.phormat.asm.access.TextRendererDrawerAccess;
 
 @Environment(EnvType.CLIENT)
@@ -87,24 +87,22 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
     public abstract void invokeAddRectangle(GlyphRenderer.Rectangle rectangle);
 
     @Inject(method = "accept(ILnet/minecraft/text/Style;I)Z", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    public void formatCustom(final int charIndex,
-                             final Style style,
-                             final int j,
-                             final CallbackInfoReturnable<Boolean> info,
-                             final FontStorage storage,
-                             final Glyph glyph,
-                             final GlyphRenderer glyphRenderer,
-                             final boolean isBold,
-                             final float red,
-                             final float green,
-                             final float blue,
-                             final float alpha,
-                             final float advance) {
-        Phormatter formatter;
-
-        for (final PhormatAccess formatting : ((ExtendedStyle) style).getPhormattings()) {
+    public void formatCustom(int charIndex,
+                            Style style,
+                            int j,
+                            CallbackInfoReturnable<Boolean> info,
+                            FontStorage storage,
+                            Glyph glyph,
+                            GlyphRenderer glyphRenderer,
+                            boolean isBold,
+                            float red,
+                            float green,
+                            float blue,
+                            float alpha,
+                            float advance) {
+        for (FormattingAccess formatting : ((ExtendedStyle) style).getPhormattings()) {
             if (formatting.isCustom()) {
-                formatter = formatting.getPhormatting().getFormatter();
+                TextFormatter formatter = formatting.getFormatter();
 
                 if (formatter != null) {
                     formatter.format(this, style, charIndex, j, storage, glyph, glyphRenderer, isBold, red, green, blue, alpha, advance);
@@ -112,6 +110,4 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
             }
         }
     }
-
-    private static int frames;
 }

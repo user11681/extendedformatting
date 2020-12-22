@@ -26,12 +26,12 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import user11681.phormat.asm.access.ExtendedStyle;
-import user11681.phormat.asm.access.PhormatAccess;
+import user11681.phormat.asm.access.FormattingAccess;
 
 @Mixin(Style.class)
 abstract class StyleMixin implements ExtendedStyle {
     @Unique
-    private final ReferenceOpenHashSet<PhormatAccess> phormattings = new ReferenceOpenHashSet<>(new PhormatAccess[5], 0, 0, 0.75F);
+    private final ReferenceOpenHashSet<FormattingAccess> phormattings = new ReferenceOpenHashSet<>(new FormattingAccess[5], 0, 0, 0.75F);
 
     @Unique
     private static Formatting switchFormatting;
@@ -41,7 +41,7 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public boolean hasPhormatting(final PhormatAccess formatting) {
+    public boolean hasPhormatting(final FormattingAccess formatting) {
         return this.phormattings.contains(formatting);
     }
 
@@ -53,7 +53,7 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public ReferenceOpenHashSet<PhormatAccess> getPhormattings() {
+    public ReferenceOpenHashSet<FormattingAccess> getPhormattings() {
         return this.phormattings;
     }
 
@@ -80,8 +80,8 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public void addPhormattings(final Collection<PhormatAccess> formattings) {
-        final Iterator<PhormatAccess> iterator = formattings.iterator();
+    public void addPhormattings(final Collection<FormattingAccess> formattings) {
+        final Iterator<FormattingAccess> iterator = formattings.iterator();
 
         while (iterator.hasNext()) {
             this.addPhormatting(iterator.next());
@@ -92,14 +92,14 @@ abstract class StyleMixin implements ExtendedStyle {
     @Unique
     public void addPhormattings(final Formatting... formattings) {
         for (final Formatting formatting : formattings) {
-            this.addPhormatting((PhormatAccess) (Object) formatting);
+            this.addPhormatting((FormattingAccess) (Object) formatting);
         }
     }
 
     @Override
     @Unique
-    public void addPhormattings(final PhormatAccess... formattings) {
-        for (final PhormatAccess formatting : formattings) {
+    public void addPhormattings(final FormattingAccess... formattings) {
+        for (final FormattingAccess formatting : formattings) {
             this.addPhormatting(formatting);
         }
     }
@@ -107,12 +107,12 @@ abstract class StyleMixin implements ExtendedStyle {
     @Override
     @Unique
     public void addPhormatting(final Formatting formatting) {
-        this.addPhormatting((PhormatAccess) (Object) formatting);
+        this.addPhormatting((FormattingAccess) (Object) formatting);
     }
 
     @Override
     @Unique
-    public void addPhormatting(final PhormatAccess format) {
+    public void addPhormatting(final FormattingAccess format) {
         this.phormattings.add(format);
     }
 
@@ -179,7 +179,7 @@ abstract class StyleMixin implements ExtendedStyle {
 
         this.transferPhormats(style);
 
-        if (((PhormatAccess) (Object) formatting).isCustom()) {
+        if (((FormattingAccess) (Object) formatting).isCustom()) {
             style.addPhormatting(formatting);
         }
     }
@@ -187,7 +187,7 @@ abstract class StyleMixin implements ExtendedStyle {
     // invoked with ASM
     @SuppressWarnings({"unused", "RedundantSuppression"})
     private static int phormat_hackOrdinal(final Formatting formatting) {
-        return ((PhormatAccess) (Object) (switchFormatting = formatting)).isCustom() && !formatting.isColor() ? Formatting.OBFUSCATED.ordinal() : formatting.ordinal();
+        return ((FormattingAccess) (Object) (switchFormatting = formatting)).isCustom() && !formatting.isColor() ? Formatting.OBFUSCATED.ordinal() : formatting.ordinal();
     }
 
     @ModifyVariable(method = {"withFormatting(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;", "withExclusiveFormatting", "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;"},
@@ -212,7 +212,7 @@ abstract class StyleMixin implements ExtendedStyle {
     public void addPhormatting(final Formatting[] formattings, final CallbackInfoReturnable<Style> info) {
         final StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
 
-        for (final PhormatAccess format : (PhormatAccess[]) (Object) formattings) {
+        for (final FormattingAccess format : (FormattingAccess[]) (Object) formattings) {
             if (format.isCustom()) {
                 style.addPhormatting(format);
             }
@@ -224,7 +224,7 @@ abstract class StyleMixin implements ExtendedStyle {
         if (parent != Style.EMPTY) {
             final StyleMixin child = (StyleMixin) (Object) info.getReturnValue();
 
-            for (final PhormatAccess phormatting : ((StyleMixin) (Object) parent).phormattings) {
+            for (final FormattingAccess phormatting : ((StyleMixin) (Object) parent).phormattings) {
                 if (!child.hasPhormatting(phormatting)) {
                     child.addPhormatting(phormatting);
                 }
@@ -238,7 +238,7 @@ abstract class StyleMixin implements ExtendedStyle {
     public void appendPhormattings(final CallbackInfoReturnable<String> info) {
         final String string = info.getReturnValue();
 
-        info.setReturnValue(string.substring(0, string.lastIndexOf('}')) + ", phormattings=" + Arrays.toString(this.phormattings.toArray(new PhormatAccess[0])) + '}');
+        info.setReturnValue(string.substring(0, string.lastIndexOf('}')) + ", phormattings=" + Arrays.toString(this.phormattings.toArray(new FormattingAccess[0])) + '}');
     }
 
     @Inject(method = "equals",
@@ -246,14 +246,14 @@ abstract class StyleMixin implements ExtendedStyle {
                      ordinal = 1),
             cancellable = true)
     public void comparePhormattings(final Object obj, final CallbackInfoReturnable<Boolean> info) {
-        final ReferenceOpenHashSet<PhormatAccess> otherPhormattings = ((StyleMixin) obj).phormattings;
-        final ReferenceOpenHashSet<PhormatAccess> phormattings = this.phormattings;
+        final ReferenceOpenHashSet<FormattingAccess> otherPhormattings = ((StyleMixin) obj).phormattings;
+        final ReferenceOpenHashSet<FormattingAccess> phormattings = this.phormattings;
 
         if (otherPhormattings.size() != phormattings.size()) {
             info.setReturnValue(false);
         }
 
-        for (final PhormatAccess phormat : otherPhormattings) {
+        for (final FormattingAccess phormat : otherPhormattings) {
             if (!phormattings.contains(phormat)) {
                 info.setReturnValue(false);
 
@@ -304,7 +304,7 @@ abstract class StyleMixin implements ExtendedStyle {
 
             final JsonArray phormattings = new JsonArray();
 
-            for (final PhormatAccess phormat : ((ExtendedStyle) style).getPhormattings()) {
+            for (final FormattingAccess phormat : ((ExtendedStyle) style).getPhormattings()) {
                 if (phormat.isCustom()) {
                     phormattings.add(phormat.cast().getName());
                 }
