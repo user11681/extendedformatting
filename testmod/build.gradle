@@ -2,6 +2,13 @@ plugins {
     id("loom")
 }
 
+project.group = "user11681"
+project.version = "bruhmomentum"
+
+loom {
+    publish(false)
+}
+
 dependencies {
     api(":")
 }
