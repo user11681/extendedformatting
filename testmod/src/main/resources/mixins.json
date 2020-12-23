@@ -1,0 +1,8 @@
+{
+    "compatibilityLevel": "JAVA_8",
+    "package": "mixin",
+    "required": true,
+    "mixins": [
+        "B"
+    ]
+}

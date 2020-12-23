@@ -9,7 +9,6 @@ import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.ClickEvent;
@@ -28,10 +27,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import user11681.phormat.asm.access.ExtendedFormatting;
 import user11681.phormat.asm.access.ExtendedStyle;
 
+@SuppressWarnings({"ConstantConditions", "SuspiciousMethodCalls"})
 @Mixin(Style.class)
 abstract class StyleMixin implements ExtendedStyle {
     @Unique
-    private final ReferenceOpenHashSet<ExtendedFormatting> phormattings = new ReferenceOpenHashSet<>(new ExtendedFormatting[5], 0, 0, 0.75F);
+    private final ReferenceOpenHashSet<ExtendedFormatting> formattings = new ReferenceOpenHashSet<>();
 
     @Unique
     private static Formatting switchFormatting;
@@ -41,79 +41,75 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public boolean hasPhormatting(final ExtendedFormatting formatting) {
-        return this.phormattings.contains(formatting);
+    public boolean hasFormatting(ExtendedFormatting formatting) {
+        return this.formattings.contains(formatting);
     }
 
     @Override
     @Unique
-    public boolean hasPhormatting(final Formatting formatting) {
-        return this.phormattings.contains(formatting);
+    public boolean hasFormatting(Formatting formatting) {
+        return this.formattings.contains(formatting);
     }
 
     @Override
     @Unique
-    public ReferenceOpenHashSet<ExtendedFormatting> getPhormattings() {
-        return this.phormattings;
+    public ReferenceOpenHashSet<ExtendedFormatting> getFormattings() {
+        return this.formattings;
     }
 
     @Override
     @Unique
-    public void transferPhormats(final Style to) {
-        this.transferPhormats(((StyleMixin) (Object) to));
+    public void transferFormatting(Style to) {
+        this.transferFormatting(((StyleMixin) (Object) to));
     }
 
     @Unique
-    private void transferPhormats(final StyleMixin style) {
-        style.addPhormattings(this.phormattings);
+    private void transferFormatting(StyleMixin style) {
+        style.addPhormattings(this.formattings);
     }
 
     @Override
     @Unique
-    public void addFormattings(final Collection<Formatting> formattings) {
-        final Iterator<Formatting> iterator = formattings.iterator();
-
-        while (iterator.hasNext()) {
-            this.addPhormatting(iterator.next());
+    public void addFormattings(Collection<Formatting> formattings) {
+        for (Formatting formatting : formattings) {
+            this.addFormatting(formatting);
         }
     }
 
     @Override
     @Unique
-    public void addPhormattings(final Collection<ExtendedFormatting> formattings) {
-        final Iterator<ExtendedFormatting> iterator = formattings.iterator();
-
-        while (iterator.hasNext()) {
-            this.addPhormatting(iterator.next());
+    public void addPhormattings(Collection<ExtendedFormatting> formattings) {
+        for (ExtendedFormatting formatting : formattings) {
+            this.addFormatting(formatting);
         }
     }
 
     @Override
     @Unique
-    public void addPhormattings(final Formatting... formattings) {
-        for (final Formatting formatting : formattings) {
-            this.addPhormatting((ExtendedFormatting) (Object) formatting);
+    public void addPhormattings(Formatting... formattings) {
+        for (Formatting formatting : formattings) {
+            this.addFormatting((ExtendedFormatting) (Object) formatting);
         }
     }
 
     @Override
     @Unique
-    public void addPhormattings(final ExtendedFormatting... formattings) {
-        for (final ExtendedFormatting formatting : formattings) {
-            this.addPhormatting(formatting);
+    public void addPhormattings(ExtendedFormatting... formattings) {
+        for (ExtendedFormatting formatting : formattings) {
+            this.addFormatting(formatting);
         }
     }
 
     @Override
     @Unique
-    public void addPhormatting(final Formatting formatting) {
-        this.addPhormatting((ExtendedFormatting) (Object) formatting);
+    public void addFormatting(Formatting formatting) {
+        this.addFormatting((ExtendedFormatting) (Object) formatting);
     }
 
     @Override
     @Unique
-    public void addPhormatting(final ExtendedFormatting format) {
-        this.phormattings.add(format);
+    public void addFormatting(ExtendedFormatting format) {
+        this.formattings.add(format);
     }
 
     @Override
@@ -124,70 +120,69 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Inject(method = "withColor(Lnet/minecraft/text/TextColor;)Lnet/minecraft/text/Style;",
             at = @At("RETURN"))
-    public void withColor(final TextColor color, final CallbackInfoReturnable<Style> info) {
-        this.transferPhormats(info.getReturnValue());
+    public void withColor(TextColor color, CallbackInfoReturnable<Style> info) {
+        this.transferFormatting(info.getReturnValue());
     }
 
     @Inject(method = "withBold",
             at = @At("RETURN"))
-    public void withBold(final Boolean bold, final CallbackInfoReturnable<Style> info) {
-        this.transferPhormats(info.getReturnValue());
+    public void withBold(Boolean bold, CallbackInfoReturnable<Style> info) {
+        this.transferFormatting(info.getReturnValue());
     }
 
     @Inject(method = "withItalic",
             at = @At("RETURN"))
-    public void withItalic(final Boolean italic, final CallbackInfoReturnable<Style> info) {
-        this.transferPhormats(info.getReturnValue());
+    public void withItalic(Boolean italic, CallbackInfoReturnable<Style> info) {
+        this.transferFormatting(info.getReturnValue());
     }
 
     @Environment(EnvType.CLIENT)
     @Inject(method = "withUnderline",
             at = @At("RETURN"))
-    public void withUnderline(final Boolean boolean_, final CallbackInfoReturnable<Style> info) {
-        this.transferPhormats(info.getReturnValue());
+    public void withUnderline(Boolean underline, CallbackInfoReturnable<Style> info) {
+        this.transferFormatting(info.getReturnValue());
     }
 
     @Inject(method = "withClickEvent",
             at = @At("RETURN"))
-    public void withClickEvent(final ClickEvent clickEvent, final CallbackInfoReturnable<Style> info) {
-        this.transferPhormats(info.getReturnValue());
+    public void withClickEvent(ClickEvent clickEvent, CallbackInfoReturnable<Style> info) {
+        this.transferFormatting(info.getReturnValue());
     }
 
     @Inject(method = "withHoverEvent",
             at = @At("RETURN"))
-    public void withHoverEvent(final HoverEvent hoverEvent, final CallbackInfoReturnable<Style> info) {
-        this.transferPhormats(info.getReturnValue());
+    public void withHoverEvent(HoverEvent hoverEvent, CallbackInfoReturnable<Style> info) {
+        this.transferFormatting(info.getReturnValue());
     }
 
     @Inject(method = "withInsertion",
             at = @At("RETURN"))
-    public void withInsertion(final String insertion, final CallbackInfoReturnable<Style> info) {
-        this.transferPhormats(info.getReturnValue());
+    public void withInsertion(String insertion, CallbackInfoReturnable<Style> info) {
+        this.transferFormatting(info.getReturnValue());
     }
 
     @Environment(EnvType.CLIENT)
     @Inject(method = "withFont",
             at = @At("RETURN"))
-    public void withFont(final Identifier font, final CallbackInfoReturnable<Style> info) {
-        this.transferPhormats(info.getReturnValue());
+    public void withFont(Identifier font, CallbackInfoReturnable<Style> info) {
+        this.transferFormatting(info.getReturnValue());
     }
 
     @Inject(method = {"withFormatting(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;", "withExclusiveFormatting"},
             at = @At(value = "TAIL"))
-    public void addPhormatting(final Formatting formatting, final CallbackInfoReturnable<Style> info) {
-        final StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
+    public void addFormatting(Formatting formatting, CallbackInfoReturnable<Style> info) {
+        StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
 
-        this.transferPhormats(style);
+        this.transferFormatting(style);
 
-        if (((ExtendedFormatting) (Object) formatting).isCustom()) {
-            style.addPhormatting(formatting);
+        if (((ExtendedFormatting) (Object) formatting).custom()) {
+            style.addFormatting(formatting);
         }
     }
 
-    // invoked with ASM
-    @SuppressWarnings({"unused", "RedundantSuppression"})
-    private static int phormat_hackOrdinal(final Formatting formatting) {
-        return ((ExtendedFormatting) (Object) (switchFormatting = formatting)).isCustom() && !formatting.isColor() ? Formatting.OBFUSCATED.ordinal() : formatting.ordinal();
+    @SuppressWarnings({"unused", "RedundantSuppression"}) // invoked with ASM
+    private static int phormat_hackOrdinal(Formatting formatting) {
+        return ((ExtendedFormatting) (Object) (switchFormatting = formatting)).custom() && !formatting.isColor() ? Formatting.OBFUSCATED.ordinal() : formatting.ordinal();
     }
 
     @ModifyVariable(method = {"withFormatting(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;", "withExclusiveFormatting", "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;"},
@@ -195,7 +190,7 @@ abstract class StyleMixin implements ExtendedStyle {
                              args = "intValue=1",
                              ordinal = 0),
                     ordinal = 4)
-    public Boolean saveObfuscated(final Boolean previous) {
+    public Boolean saveObfuscated(Boolean previous) {
         return previousObfuscated = previous;
     }
 
@@ -203,30 +198,30 @@ abstract class StyleMixin implements ExtendedStyle {
                     at = @At(value = "STORE",
                              ordinal = 1),
                     ordinal = 4)
-    public Boolean fixObfuscated(final Boolean previous) {
+    public Boolean fixObfuscated(Boolean previous) {
         return switchFormatting == Formatting.OBFUSCATED || previousObfuscated == Boolean.TRUE;
     }
 
     @Inject(method = "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;",
             at = @At(value = "TAIL"))
-    public void addPhormatting(final Formatting[] formattings, final CallbackInfoReturnable<Style> info) {
-        final StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
+    public void addFormatting(Formatting[] formattings, CallbackInfoReturnable<Style> info) {
+        StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
 
-        for (final ExtendedFormatting format : (ExtendedFormatting[]) (Object) formattings) {
-            if (format.isCustom()) {
-                style.addPhormatting(format);
+        for (ExtendedFormatting format : (ExtendedFormatting[]) (Object) formattings) {
+            if (format.custom()) {
+                style.addFormatting(format);
             }
         }
     }
 
     @Inject(method = "withParent", at = @At("TAIL"))
-    public void withParent(final Style parent, final CallbackInfoReturnable<Style> info) {
+    public void withParent(Style parent, CallbackInfoReturnable<Style> info) {
         if (parent != Style.EMPTY) {
-            final StyleMixin child = (StyleMixin) (Object) info.getReturnValue();
+            StyleMixin child = (StyleMixin) (Object) info.getReturnValue();
 
-            for (final ExtendedFormatting phormatting : ((StyleMixin) (Object) parent).phormattings) {
-                if (!child.hasPhormatting(phormatting)) {
-                    child.addPhormatting(phormatting);
+            for (ExtendedFormatting formatting : ((StyleMixin) (Object) parent).formattings) {
+                if (!child.hasFormatting(formatting)) {
+                    child.addFormatting(formatting);
                 }
             }
         }
@@ -235,26 +230,22 @@ abstract class StyleMixin implements ExtendedStyle {
     @Inject(method = "toString",
             at = @At("RETURN"),
             cancellable = true)
-    public void appendPhormattings(final CallbackInfoReturnable<String> info) {
-        final String string = info.getReturnValue();
-
-        info.setReturnValue(string.substring(0, string.lastIndexOf('}')) + ", phormattings=" + Arrays.toString(this.phormattings.toArray(new ExtendedFormatting[0])) + '}');
+    public void appendFormatting(CallbackInfoReturnable<String> info) {
+        info.setReturnValue(info.getReturnValue().replace("}", ", phormat:formatting=" + Arrays.toString(this.formattings.toArray(new ExtendedFormatting[0])) + '}'));
     }
 
     @Inject(method = "equals",
             at = @At(value = "RETURN",
                      ordinal = 1),
             cancellable = true)
-    public void comparePhormattings(final Object obj, final CallbackInfoReturnable<Boolean> info) {
-        final ReferenceOpenHashSet<ExtendedFormatting> otherPhormattings = ((StyleMixin) obj).phormattings;
-        final ReferenceOpenHashSet<ExtendedFormatting> phormattings = this.phormattings;
+    public void compareCustomFormatting(Object obj, CallbackInfoReturnable<Boolean> info) {
+        ReferenceOpenHashSet<ExtendedFormatting> otherFormattings = ((StyleMixin) obj).formattings;
+        ReferenceOpenHashSet<ExtendedFormatting> formattings = this.formattings;
 
-        if (otherPhormattings.size() != phormattings.size()) {
+        if (otherFormattings.size() != formattings.size()) {
             info.setReturnValue(false);
-        }
-
-        for (final ExtendedFormatting phormat : otherPhormattings) {
-            if (!phormattings.contains(phormat)) {
+        } else for (ExtendedFormatting formatting : otherFormattings) {
+            if (!formattings.contains(formatting)) {
                 info.setReturnValue(false);
 
                 return;
@@ -265,13 +256,14 @@ abstract class StyleMixin implements ExtendedStyle {
     @ModifyArg(method = "hashCode",
                at = @At(value = "INVOKE",
                         target = "Ljava/util/Objects;hash([Ljava/lang/Object;)I"))
-    public Object[] hashPhormattings(final Object[] previous) {
-        final Object[] phormattings = this.phormattings.toArray();
-        final int previousLength = previous.length;
-        final int formattingCount = phormattings.length;
-        final Object[] all = Arrays.copyOf(previous, previousLength + formattingCount);
+    public Object[] hashCustomFormatting(Object[] previous) {
+        Object[] formattings = this.formattings.toArray();
+        int previousLength = previous.length;
+        int formattingCount = formattings.length;
+        Object[] all = new Object[previousLength + formattingCount];
 
-        System.arraycopy(phormattings, 0, all, previousLength, formattingCount);
+        System.arraycopy(previous, 0, all, 0, previousLength);
+        System.arraycopy(formattings, 0, all, previousLength, formattingCount);
 
         return all;
     }
@@ -281,13 +273,13 @@ abstract class StyleMixin implements ExtendedStyle {
         @Inject(method = "deserialize",
                 at = @At(value = "NEW",
                          target = "net/minecraft/text/Style"))
-        public void deserializeCustomFormatting(final JsonElement jsonElement, final Type type, final JsonDeserializationContext jsonDeserializationContext, final CallbackInfoReturnable<Style> info) {
-            final ExtendedStyle style = (ExtendedStyle) info.getReturnValue();
-            final JsonObject object = jsonElement.getAsJsonObject();
+        public void deserializeCustomFormatting(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext, CallbackInfoReturnable<Style> info) {
+            ExtendedStyle style = (ExtendedStyle) info.getReturnValue();
+            JsonObject object = jsonElement.getAsJsonObject();
 
             if (object.has("phormat")) {
-                for (final JsonElement phormat : object.getAsJsonArray("phormat")) {
-                    style.addPhormatting(Formatting.byName(phormat.getAsString()));
+                for (JsonElement phormat : object.getAsJsonArray("phormat")) {
+                    style.addFormatting(Formatting.byName(phormat.getAsString()));
                 }
             }
         }
@@ -295,22 +287,22 @@ abstract class StyleMixin implements ExtendedStyle {
         @Inject(method = "serialize",
                 at = @At("RETURN"),
                 cancellable = true)
-        public void serializeCustomFormatting(final Style style, final Type type, final JsonSerializationContext jsonSerializationContext, final CallbackInfoReturnable<JsonElement> info) {
+        public void serializeCustomFormatting(Style style, Type type, JsonSerializationContext jsonSerializationContext, CallbackInfoReturnable<JsonElement> info) {
             JsonObject object = (JsonObject) info.getReturnValue();
 
             if (object == null) {
                 info.setReturnValue(object = new JsonObject());
             }
 
-            final JsonArray phormattings = new JsonArray();
+            JsonArray formatting = new JsonArray();
 
-            for (final ExtendedFormatting phormat : ((ExtendedStyle) style).getPhormattings()) {
-                if (phormat.isCustom()) {
-                    phormattings.add(phormat.cast().getName());
+            for (ExtendedFormatting phormat : ((ExtendedStyle) style).getFormattings()) {
+                if (phormat.custom()) {
+                    formatting.add(phormat.cast().getName());
                 }
             }
 
-            object.add("phormat", phormattings);
+            object.add("phormat", formatting);
         }
     }
 }

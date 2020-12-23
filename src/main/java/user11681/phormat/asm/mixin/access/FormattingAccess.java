@@ -1,4 +1,4 @@
-package user11681.phormat.asm.mixin;
+package user11681.phormat.asm.mixin.access;
 
 import java.util.Map;
 import java.util.regex.Pattern;

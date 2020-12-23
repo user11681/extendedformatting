@@ -19,9 +19,10 @@ import org.objectweb.asm.tree.VarInsnNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+@SuppressWarnings("CommentedOutCode")
 public class PhormatTransformer implements IMixinConfigPlugin {
     @Override
-    public void onLoad(final String mixinPackage) {}
+    public void onLoad(String mixinPackage) {}
 
     @Override
     public String getRefMapperConfig() {
@@ -29,12 +30,12 @@ public class PhormatTransformer implements IMixinConfigPlugin {
     }
 
     @Override
-    public boolean shouldApplyMixin(final String targetClassName, final String mixinClassName) {
+    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         return true;
     }
 
     @Override
-    public void acceptTargets(final Set<String> myTargets, final Set<String> otherTargets) {}
+    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
 
     @Override
     public List<String> getMixins() {
@@ -42,18 +43,18 @@ public class PhormatTransformer implements IMixinConfigPlugin {
     }
 
     @Override
-    public void preApply(final String targetClassName, final ClassNode targetClass, final String mixinClassName, final IMixinInfo mixinInfo) {
+    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
         switch (mixinClassName) {
             case "user11681.phormat.asm.mixin.StyleMixin": {
                 MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
-                final ObjectOpenHashSet<String> methodNames = new ObjectOpenHashSet<>();
+                ObjectOpenHashSet<String> methodNames = new ObjectOpenHashSet<>(new String[]{
+                    resolver.mapMethodName("intermediary", "net.minecraft.class_2583", "method_27705", "([Lnet/minecraft/class_124;)Lnet/minecraft/class_2583;"),
+                    resolver.mapMethodName("intermediary", "net.minecraft.class_2583", "method_27706", "(Lnet/minecraft/class_124;)Lnet/minecraft/class_2583;"),
+                    resolver.mapMethodName("intermediary", "net.minecraft.class_2583", "method_27707", "(Lnet/minecraft/class_124;)Lnet/minecraft/class_2583;")
+                });
 
-                methodNames.add(resolver.mapMethodName("intermediary", "net.minecraft.class_2583", "method_27705", "([Lnet/minecraft/class_124;)Lnet/minecraft/class_2583;"));
-                methodNames.add(resolver.mapMethodName("intermediary", "net.minecraft.class_2583", "method_27706", "(Lnet/minecraft/class_124;)Lnet/minecraft/class_2583;"));
-                methodNames.add(resolver.mapMethodName("intermediary", "net.minecraft.class_2583", "method_27707", "(Lnet/minecraft/class_124;)Lnet/minecraft/class_2583;"));
-
-                for (final MethodNode method : targetClass.methods) {
-                    final String name = method.name;
+                for (MethodNode method : targetClass.methods) {
+                    String name = method.name;
 
                     if (methodNames.contains(name)) {
                         AbstractInsnNode instruction = method.instructions.getFirst();
@@ -76,26 +77,29 @@ public class PhormatTransformer implements IMixinConfigPlugin {
             break;
 
             case "user11681.phormat.asm.mixin.TextColorMixin":
-                final MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
-                final String getRgb = resolver.mapMethodName("intermediary", "net.minecraft.class_5251", "method_27716", "()I");
+                MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
+                String getRgb = resolver.mapMethodName("intermediary", "net.minecraft.class_5251", "method_27716", "()I");
 
-                for (final MethodNode method : targetClass.methods) {
+                for (MethodNode method : targetClass.methods) {
                     if (getRgb.equals(method.name)) {
-                        final String internalName = targetClassName.replace('.', '/');
-                        final String rgb = resolver.mapFieldName("intermediary", "net.minecraft.class_5251", "field_24364", "I");
+                        String internalName = targetClassName.replace('.', '/');
+                        String rgb = resolver.mapFieldName("intermediary", "net.minecraft.class_5251", "field_24364", "I");
 
-                        final InsnList insertion = new InsnList();
-                        final LabelNode endIf = new LabelNode();
+                        InsnList insertion = new InsnList();
+                        LabelNode endIf = new LabelNode();
 
+                        /*if (this.phormat_hasColorFunction) {
+                            return this.phormat_previousColor = this.phormat_colorFunction.apply(this.phormat_previousColor);
+                        }*/
                         insertion.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this
                         insertion.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this this
                         insertion.add(new FieldInsnNode(Opcodes.GETFIELD, internalName, "phormat_hasColorFunction", "Z")); // this boolean
                         insertion.add(new JumpInsnNode(Opcodes.IFEQ, endIf)); // this
                         insertion.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this this
-                        insertion.add(new FieldInsnNode(Opcodes.GETFIELD, internalName, "phormat_colorFunction", "Luser11681/phormat/ColorFunction;")); // this ColorFunction
+                        insertion.add(new FieldInsnNode(Opcodes.GETFIELD, internalName, "phormat_colorFunction", "Luser11681/phormat/api/ColorFunction;")); // this ColorFunction
                         insertion.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this ColorFunction this
-                        insertion.add(new FieldInsnNode(Opcodes.GETFIELD, internalName, rgb, "I")); // this ColorFunction int
-                        insertion.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "user11681/phormat/ColorFunction", "apply", "(I)I", true)); // this int
+                        insertion.add(new FieldInsnNode(Opcodes.GETFIELD, internalName, "phormat_previousColor", "I")); // this ColorFunction int
+                        insertion.add(new MethodInsnNode(Opcodes.INVOKEINTERFACE, "user11681/phormat/api/ColorFunction", "apply", "(I)I", true)); // this int
                         insertion.add(new InsnNode(Opcodes.DUP_X1)); // int this int
                         insertion.add(new FieldInsnNode(Opcodes.PUTFIELD, internalName, "phormat_previousColor", "I")); // int
                         insertion.add(new InsnNode(Opcodes.IRETURN));
@@ -110,5 +114,5 @@ public class PhormatTransformer implements IMixinConfigPlugin {
     }
 
     @Override
-    public void postApply(final String targetClassName, final ClassNode targetClass, final String mixinClassName, final IMixinInfo mixinInfo) {}
+    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 }

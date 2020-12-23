@@ -20,7 +20,7 @@ public interface TextFormatter {
      * @param drawer the {@link TextRenderer.Drawer} instance that draws this glyph.
      * @param style the {@link Style} of the glyph.
      * @param charIndex the index of the current glyph in the text.
-     * @param j the height of the character.
+     * @param y the height of the character.
      * @param storage the {@link FontStorage} of the current text's font.
      * @param glyph the current glyph.
      * @param glyphRenderer the renderer for the current glyph.
@@ -35,7 +35,7 @@ public interface TextFormatter {
        TextRendererDrawerAccess drawer,
        Style style,
        int charIndex,
-       int j,
+       int y,
        FontStorage storage,
        Glyph glyph,
        GlyphRenderer glyphRenderer,

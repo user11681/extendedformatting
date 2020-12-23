@@ -27,25 +27,17 @@ abstract class TextColorMixin {
 
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "fromFormatting", at = @At("RETURN"), cancellable = true)
-    private static void setColorFunction(final Formatting formatting, final CallbackInfoReturnable<TextColor> info) {
-        final TextColorMixin color = (TextColorMixin) (Object) info.getReturnValue();
+    private static void setColorFunction(Formatting formatting, CallbackInfoReturnable<TextColor> info) {
+        ExtendedFormatting extendedFormatting = (ExtendedFormatting) (Object) formatting;
 
-        if (color != null) {
-            final ExtendedFormatting formattingAccess = (ExtendedFormatting) (Object) formatting;
-
-            if (formattingAccess.isCustom()) {
-                final ColorFunction colorFunction = formattingAccess.getColorFunction();
-
-                if (colorFunction != null) {
-                    color.phormat_colorFunction = colorFunction;
-                    color.phormat_hasColorFunction = true;
-                }
-            }
+        if (extendedFormatting.custom()) {
+            TextColorMixin color = (TextColorMixin) (Object) info.getReturnValue();
+            color.phormat_hasColorFunction = (color.phormat_colorFunction = extendedFormatting.colorFunction()) != null;
         }
     }
 
     @Inject(method = "getHexCode", at = @At("HEAD"), cancellable = true)
-    public void matchHexCode(final CallbackInfoReturnable<String> info) {
+    public void matchHexCode(CallbackInfoReturnable<String> info) {
         if (this.phormat_hasColorFunction) {
             info.setReturnValue(Integer.toHexString(this.phormat_previousColor));
         }

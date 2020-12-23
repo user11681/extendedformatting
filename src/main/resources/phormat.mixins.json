@@ -6,10 +6,11 @@
     "plugin": "user11681.phormat.asm.PhormatTransformer",
     "mixins": [
         "FormattingMixin",
-        "FormattingAccess",
         "StyleMixin",
         "StyleMixin$SerializerMixin",
-        "TextColorMixin"
+        "TextColorMixin",
+        "access.FormattingAccess",
+        "access.TextColorAccess"
     ],
     "client": [
         "TextRendererDrawerMixin"

@@ -6,15 +6,15 @@ import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 
 public interface ExtendedStyle {
-    boolean hasPhormatting(ExtendedFormatting formatting);
+    boolean hasFormatting(ExtendedFormatting formatting);
 
-    boolean hasPhormatting(Formatting formatting);
+    boolean hasFormatting(Formatting formatting);
 
-    ReferenceOpenHashSet<ExtendedFormatting> getPhormattings();
+    ReferenceOpenHashSet<ExtendedFormatting> getFormattings();
 
-    void transferPhormats(Style to);
+    void transferFormatting(Style to);
 
-    void addPhormatting(Formatting formatting);
+    void addFormatting(Formatting formatting);
 
     void addFormattings(Collection<Formatting> formattings);
 
@@ -24,7 +24,7 @@ public interface ExtendedStyle {
 
     void addPhormattings(ExtendedFormatting... formattings);
 
-    void addPhormatting(ExtendedFormatting formatting);
+    void addFormatting(ExtendedFormatting formatting);
 
     Style cast();
 }

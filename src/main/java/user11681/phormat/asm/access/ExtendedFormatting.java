@@ -5,17 +5,17 @@ import user11681.phormat.api.ColorFunction;
 import user11681.phormat.api.format.TextFormatter;
 
 public interface ExtendedFormatting {
-    char getCode();
+    char code();
 
-    ColorFunction getColorFunction();
+    ColorFunction colorFunction();
 
-    void setColorFunction(ColorFunction colorFunction);
+    ExtendedFormatting colorFunction(ColorFunction colorFunction);
 
-    TextFormatter getFormatter();
+    TextFormatter formatter();
 
-    void setFormatter(TextFormatter formatter);
+    ExtendedFormatting formatter(TextFormatter formatter);
 
-    boolean isCustom();
+    boolean custom();
 
     Formatting cast();
 }

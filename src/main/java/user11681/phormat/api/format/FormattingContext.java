@@ -13,7 +13,7 @@ public class FormattingContext {
     public TextRendererDrawerAccess drawer;
     public Style style;
     public int charIndex;
-    public int j;
+    public int y;
     public FontStorage storage;
     public Glyph glyph;
     public GlyphRenderer glyphRenderer;

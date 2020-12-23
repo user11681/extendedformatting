@@ -89,7 +89,7 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
     @Inject(method = "accept(ILnet/minecraft/text/Style;I)Z", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void formatCustom(int charIndex,
                             Style style,
-                            int j,
+                            int y,
                             CallbackInfoReturnable<Boolean> info,
                             FontStorage storage,
                             Glyph glyph,
@@ -100,12 +100,12 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
                             float blue,
                             float alpha,
                             float advance) {
-        for (ExtendedFormatting formatting : ((ExtendedStyle) style).getPhormattings()) {
-            if (formatting.isCustom()) {
-                TextFormatter formatter = formatting.getFormatter();
+        for (ExtendedFormatting formatting : ((ExtendedStyle) style).getFormattings()) {
+            if (formatting.custom()) {
+                TextFormatter formatter = formatting.formatter();
 
                 if (formatter != null) {
-                    formatter.format(this, style, charIndex, j, storage, glyph, glyphRenderer, isBold, red, green, blue, alpha, advance);
+                    formatter.format(this, style, charIndex, y, storage, glyph, glyphRenderer, isBold, red, green, blue, alpha, advance);
                 }
             }
         }

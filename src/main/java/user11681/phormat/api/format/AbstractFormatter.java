@@ -20,25 +20,25 @@ public abstract class AbstractFormatter implements TextFormatter {
      */
     @Override
     public void format(
-        final TextRendererDrawerAccess drawer,
-        final Style style,
-        final int charIndex,
-        final int j,
-        final FontStorage storage,
-        final Glyph glyph,
-        final GlyphRenderer glyphRenderer,
-        final boolean isBold,
-        final float red,
-        final float green,
-        final float blue,
-        final float alpha,
-        final float advance) {
-        final FormattingContext context = this.context;
+        TextRendererDrawerAccess drawer,
+        Style style,
+        int charIndex,
+        int y,
+        FontStorage storage,
+        Glyph glyph,
+        GlyphRenderer glyphRenderer,
+        boolean isBold,
+        float red,
+        float green,
+        float blue,
+        float alpha,
+        float advance) {
+        FormattingContext context = this.context;
 
         context.drawer = drawer;
         context.style = style;
         context.charIndex = charIndex;
-        context.j = j;
+        context.y = y;
         context.storage = storage;
         context.glyph = glyph;
         context.glyphRenderer = glyphRenderer;
@@ -48,6 +48,8 @@ public abstract class AbstractFormatter implements TextFormatter {
         context.blue = blue;
         context.alpha = alpha;
         context.advance = advance;
+
+        this.format();
     }
 
     /**
