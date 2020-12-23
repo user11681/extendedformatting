@@ -1,6 +1,6 @@
 Phormat is a Fabric-based library that facilitates text formatting.
 
-### include
+### depend
 
 `build.gradle`:
 
