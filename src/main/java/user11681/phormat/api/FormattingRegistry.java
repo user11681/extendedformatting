@@ -16,10 +16,6 @@ public class FormattingRegistry {
     private static final Map<String, Formatting> nameMap = FormattingAccess.getNameMap();
     private static final Reference2ObjectOpenHashMap<Formatting, TextColor> colorMap = new Reference2ObjectOpenHashMap<>(TextColorAccess.getFormattingColors());
 
-    static {
-        TextColorAccess.setFormattingColors(colorMap);
-    }
-
     public static ExtendedFormatting register(String name, char code, int colorIndex, @Nullable Integer color) {
         return register(FormattingAccess.instantiate(name, FormattingAccess.getValues().length, name, code, colorIndex, color), code);
     }
@@ -70,5 +66,9 @@ public class FormattingRegistry {
         }
 
         return (ExtendedFormatting) (Object) formatting;
+    }
+
+    static {
+        TextColorAccess.setFormattingColors(colorMap);
     }
 }
