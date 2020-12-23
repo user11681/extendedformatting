@@ -20,7 +20,7 @@ dependencies {
 ### use
 
 ```java
-public class Example {
+public class Example implements ModInitializer {
     // will change color based on previous color and PRNG
     public static final ExtendedFormatting colors = FormattingRegistry.register("COLORS", 'u', 16, null)
         .color(previousColor -> previousColor + Random.nextInt(1 << 24));
@@ -48,5 +48,8 @@ public class Example {
         // will draw a rectangle covering bottom half of the height and full width of the character
         drawer.invokeAddRectangle(new GlyphRenderer.Rectangle(x, -y, x + advance, 0, 0.01F, red, green, blue, alpha));
     });
+    
+    @Override
+    public void onInitialize() {}
 }
 ```
