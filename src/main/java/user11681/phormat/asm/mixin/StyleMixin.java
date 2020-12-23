@@ -8,6 +8,7 @@ import com.google.gson.JsonSerializationContext;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Set;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.ClickEvent;
@@ -23,14 +24,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import user11681.phormat.asm.access.ExtendedFormatting;
+import user11681.phormat.api.ExtendedFormatting;
 import user11681.phormat.asm.access.ExtendedStyle;
 
-@SuppressWarnings({"ConstantConditions", "SuspiciousMethodCalls"})
+@SuppressWarnings("ConstantConditions")
 @Mixin(Style.class)
 abstract class StyleMixin implements ExtendedStyle {
     @Unique
-    private final ReferenceOpenHashSet<ExtendedFormatting> formattings = new ReferenceOpenHashSet<>();
+    private final ReferenceOpenHashSet<Formatting> formattings = new ReferenceOpenHashSet<>();
 
     @Unique
     private static Formatting switchFormatting;
@@ -40,8 +41,8 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public boolean hasFormatting(ExtendedFormatting formatting) {
-        return this.formattings.contains(formatting);
+    public Set<Formatting> getFormattings() {
+        return this.formattings;
     }
 
     @Override
@@ -52,19 +53,27 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public ReferenceOpenHashSet<ExtendedFormatting> getFormattings() {
-        return this.formattings;
-    }
-
-    @Override
-    @Unique
     public void transferFormatting(Style to) {
         this.transferFormatting(((StyleMixin) (Object) to));
     }
 
     @Unique
     private void transferFormatting(StyleMixin style) {
-        style.addPhormattings(this.formattings);
+        style.addFormattings(this.formattings);
+    }
+
+    @Override
+    @Unique
+    public void addFormatting(Formatting formatting) {
+        this.formattings.add(formatting);
+    }
+
+    @Override
+    @Unique
+    public void addFormattings(Formatting... formattings) {
+        for (Formatting formatting : formattings) {
+            this.addFormatting(formatting);
+        }
     }
 
     @Override
@@ -73,42 +82,6 @@ abstract class StyleMixin implements ExtendedStyle {
         for (Formatting formatting : formattings) {
             this.addFormatting(formatting);
         }
-    }
-
-    @Override
-    @Unique
-    public void addPhormattings(Iterable<ExtendedFormatting> formattings) {
-        for (ExtendedFormatting formatting : formattings) {
-            this.addFormatting(formatting);
-        }
-    }
-
-    @Override
-    @Unique
-    public void addPhormattings(Formatting... formattings) {
-        for (Formatting formatting : formattings) {
-            this.addFormatting((ExtendedFormatting) (Object) formatting);
-        }
-    }
-
-    @Override
-    @Unique
-    public void addPhormattings(ExtendedFormatting... formattings) {
-        for (ExtendedFormatting formatting : formattings) {
-            this.addFormatting(formatting);
-        }
-    }
-
-    @Override
-    @Unique
-    public void addFormatting(Formatting formatting) {
-        this.addFormatting((ExtendedFormatting) (Object) formatting);
-    }
-
-    @Override
-    @Unique
-    public void addFormatting(ExtendedFormatting format) {
-        this.formattings.add(format);
     }
 
     @Override
@@ -174,14 +147,14 @@ abstract class StyleMixin implements ExtendedStyle {
 
         this.transferFormatting(style);
 
-        if (((ExtendedFormatting) (Object) formatting).custom()) {
+        if (formatting instanceof ExtendedFormatting) {
             style.addFormatting(formatting);
         }
     }
 
     @SuppressWarnings({"unused", "RedundantSuppression"}) // invoked with ASM
     private static int phormat_hackOrdinal(Formatting formatting) {
-        return ((ExtendedFormatting) (Object) (switchFormatting = formatting)).custom() && !formatting.isColor() ? Formatting.OBFUSCATED.ordinal() : formatting.ordinal();
+        return (switchFormatting = formatting) instanceof ExtendedFormatting && !formatting.isColor() ? Formatting.OBFUSCATED.ordinal() : formatting.ordinal();
     }
 
     @ModifyVariable(method = {"withFormatting(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;", "withExclusiveFormatting", "withFormatting([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/Style;"},
@@ -206,9 +179,9 @@ abstract class StyleMixin implements ExtendedStyle {
     public void addFormatting(Formatting[] formattings, CallbackInfoReturnable<Style> info) {
         StyleMixin style = (StyleMixin) (Object) info.getReturnValue();
 
-        for (ExtendedFormatting format : (ExtendedFormatting[]) (Object) formattings) {
-            if (format.custom()) {
-                style.addFormatting(format);
+        for (Formatting formatting : formattings) {
+            if (formatting instanceof ExtendedFormatting) {
+                style.addFormatting(formatting);
             }
         }
     }
@@ -218,7 +191,7 @@ abstract class StyleMixin implements ExtendedStyle {
         if (parent != Style.EMPTY) {
             StyleMixin child = (StyleMixin) (Object) info.getReturnValue();
 
-            for (ExtendedFormatting formatting : ((StyleMixin) (Object) parent).formattings) {
+            for (Formatting formatting : ((StyleMixin) (Object) parent).formattings) {
                 if (!child.hasFormatting(formatting)) {
                     child.addFormatting(formatting);
                 }
@@ -230,7 +203,7 @@ abstract class StyleMixin implements ExtendedStyle {
             at = @At("RETURN"),
             cancellable = true)
     public void appendFormatting(CallbackInfoReturnable<String> info) {
-        info.setReturnValue(info.getReturnValue().replace("}", ", phormat:formatting=" + Arrays.toString(this.formattings.toArray(new ExtendedFormatting[0])) + '}'));
+        info.setReturnValue(info.getReturnValue().replace("}", ", phormat:formatting=" + Arrays.toString(this.formattings.toArray(new Formatting[0])) + '}'));
     }
 
     @Inject(method = "equals",
@@ -238,12 +211,12 @@ abstract class StyleMixin implements ExtendedStyle {
                      ordinal = 1),
             cancellable = true)
     public void compareCustomFormatting(Object obj, CallbackInfoReturnable<Boolean> info) {
-        ReferenceOpenHashSet<ExtendedFormatting> otherFormattings = ((StyleMixin) obj).formattings;
-        ReferenceOpenHashSet<ExtendedFormatting> formattings = this.formattings;
+        ReferenceOpenHashSet<Formatting> otherFormattings = ((StyleMixin) obj).formattings;
+        ReferenceOpenHashSet<Formatting> formattings = this.formattings;
 
         if (otherFormattings.size() != formattings.size()) {
             info.setReturnValue(false);
-        } else for (ExtendedFormatting formatting : otherFormattings) {
+        } else for (Formatting formatting : otherFormattings) {
             if (!formattings.contains(formatting)) {
                 info.setReturnValue(false);
 
@@ -295,9 +268,9 @@ abstract class StyleMixin implements ExtendedStyle {
 
             JsonArray formatting = new JsonArray();
 
-            for (ExtendedFormatting phormat : ((ExtendedStyle) style).getFormattings()) {
-                if (phormat.custom()) {
-                    formatting.add(phormat.cast().getName());
+            for (Formatting phormat : ((ExtendedStyle) style).getFormattings()) {
+                if (phormat instanceof ExtendedFormatting) {
+                    formatting.add(phormat.getName());
                 }
             }
 

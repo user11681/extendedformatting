@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import user11681.phormat.api.ColorFunction;
-import user11681.phormat.asm.access.ExtendedFormatting;
+import user11681.phormat.api.ExtendedFormatting;
 
 @Mixin(TextColor.class)
 abstract class TextColorMixin {
@@ -28,11 +28,9 @@ abstract class TextColorMixin {
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "fromFormatting", at = @At("RETURN"), cancellable = true)
     private static void setColorFunction(Formatting formatting, CallbackInfoReturnable<TextColor> info) {
-        ExtendedFormatting extendedFormatting = (ExtendedFormatting) (Object) formatting;
-
-        if (extendedFormatting.custom()) {
+        if (formatting instanceof ExtendedFormatting) {
             TextColorMixin color = (TextColorMixin) (Object) info.getReturnValue();
-            color.phormat_hasColorFunction = (color.phormat_colorFunction = extendedFormatting.colorFunction()) != null;
+            color.phormat_hasColorFunction = (color.phormat_colorFunction = ((ExtendedFormatting) formatting).colorFunction()) != null;
         }
     }
 

@@ -1,0 +1,9 @@
+accessWidener v1 named
+
+extendable class net/minecraft/util/Formatting
+accessible field net/minecraft/util/Formatting field_1072 [Lnet/minecraft/util/Formatting;
+accessible field net/minecraft/util/Formatting code C
+mutable field net/minecraft/util/Formatting field_1072 [Lnet/minecraft/util/Formatting;
+accessible method net/minecraft/util/Formatting <init> (Ljava/lang/String;ILjava/lang/String;CILjava/lang/Integer;)V
+accessible method net/minecraft/util/Formatting <init> (Ljava/lang/String;ILjava/lang/String;CZ)V
+accessible method net/minecraft/util/Formatting <init> (Ljava/lang/String;ILjava/lang/String;CZILjava/lang/Integer;)V

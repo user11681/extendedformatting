@@ -8,6 +8,7 @@ import net.minecraft.client.font.Glyph;
 import net.minecraft.client.font.GlyphRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.text.Style;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Matrix4f;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,9 +18,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import user11681.phormat.api.ExtendedFormatting;
 import user11681.phormat.api.format.TextFormatter;
 import user11681.phormat.asm.access.ExtendedStyle;
-import user11681.phormat.asm.access.ExtendedFormatting;
 import user11681.phormat.asm.access.TextRendererDrawerAccess;
 
 @Environment(EnvType.CLIENT)
@@ -100,9 +101,9 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
                             float blue,
                             float alpha,
                             float advance) {
-        for (ExtendedFormatting formatting : ((ExtendedStyle) style).getFormattings()) {
-            if (formatting.custom()) {
-                TextFormatter formatter = formatting.formatter();
+        for (Formatting formatting : ((ExtendedStyle) style).getFormattings()) {
+            if (formatting instanceof ExtendedFormatting) {
+                TextFormatter formatter = ((ExtendedFormatting) formatting).formatter();
 
                 if (formatter != null) {
                     formatter.format(this, style, charIndex, y, storage, glyph, glyphRenderer, isBold, red, green, blue, alpha, advance);

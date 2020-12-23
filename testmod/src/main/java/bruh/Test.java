@@ -5,7 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.font.GlyphRenderer;
 import user11681.phormat.api.FormattingRegistry;
 import user11681.phormat.api.format.SimpleFormatter;
-import user11681.phormat.asm.access.ExtendedFormatting;
+import user11681.phormat.api.ExtendedFormatting;
 import user11681.phormat.asm.access.TextRendererDrawerAccess;
 
 public class Test implements ModInitializer {

@@ -2,6 +2,13 @@ plugins {
     id("loom")
 }
 
+loom {
+    minecraftVersion = "1.16.4"
+
+    enumWidener("net/minecraft/util/Formatting")
+    accessWidener("src/main/resources/phormat.accesswidener")
+}
+
 project.group = "user11681"
 project.version = "1.0.0"
 

@@ -5,25 +5,17 @@ import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 
 public interface ExtendedStyle {
-    boolean hasFormatting(ExtendedFormatting formatting);
+    Set<Formatting> getFormattings();
 
     boolean hasFormatting(Formatting formatting);
 
-    Set<ExtendedFormatting> getFormattings();
-
-    void transferFormatting(Style to);
-
     void addFormatting(Formatting formatting);
+
+    void addFormattings(Formatting... formattings);
 
     void addFormattings(Iterable<Formatting> formattings);
 
-    void addPhormattings(Iterable<ExtendedFormatting> formattings);
-
-    void addPhormattings(Formatting... formattings);
-
-    void addPhormattings(ExtendedFormatting... formattings);
-
-    void addFormatting(ExtendedFormatting formatting);
+    void transferFormatting(Style to);
 
     Style cast();
 }
