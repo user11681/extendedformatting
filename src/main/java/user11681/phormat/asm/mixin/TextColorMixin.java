@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import user11681.phormat.api.ColorFunction;
-import user11681.phormat.asm.access.FormattingAccess;
+import user11681.phormat.asm.access.ExtendedFormatting;
 
 @Mixin(TextColor.class)
 abstract class TextColorMixin {
@@ -31,7 +31,7 @@ abstract class TextColorMixin {
         final TextColorMixin color = (TextColorMixin) (Object) info.getReturnValue();
 
         if (color != null) {
-            final FormattingAccess formattingAccess = (FormattingAccess) (Object) formatting;
+            final ExtendedFormatting formattingAccess = (ExtendedFormatting) (Object) formatting;
 
             if (formattingAccess.isCustom()) {
                 final ColorFunction colorFunction = formattingAccess.getColorFunction();

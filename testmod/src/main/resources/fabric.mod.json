@@ -1,0 +1,10 @@
+{
+    "schemaVersion": 1,
+    "id": "bigbruhmoment",
+    "version": "${version}",
+    "entrypoints": {
+        "main": [
+            "user11681.phormat.Test"
+        ]
+    }
+}

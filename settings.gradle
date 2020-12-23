@@ -9,3 +9,5 @@ pluginManagement {
 }
 
 includeBuild("loom")
+
+include(":testmod")

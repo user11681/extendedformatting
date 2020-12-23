@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import user11681.phormat.api.format.TextFormatter;
 import user11681.phormat.asm.access.ExtendedStyle;
-import user11681.phormat.asm.access.FormattingAccess;
+import user11681.phormat.asm.access.ExtendedFormatting;
 import user11681.phormat.asm.access.TextRendererDrawerAccess;
 
 @Environment(EnvType.CLIENT)
@@ -100,7 +100,7 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
                             float blue,
                             float alpha,
                             float advance) {
-        for (FormattingAccess formatting : ((ExtendedStyle) style).getPhormattings()) {
+        for (ExtendedFormatting formatting : ((ExtendedStyle) style).getPhormattings()) {
             if (formatting.isCustom()) {
                 TextFormatter formatter = formatting.getFormatter();
 

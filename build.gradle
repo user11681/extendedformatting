@@ -1,10 +1,7 @@
 plugins {
-    id("loom").version("snapshot")
+    id("loom")
 }
 
 project.group = "user11681"
-project.version = "0.1.4"
+project.version = "1.0.0"
 
-dependencies {
-    apiInclude("fabric-asm")
-}

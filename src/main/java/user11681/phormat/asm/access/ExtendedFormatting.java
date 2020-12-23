@@ -4,7 +4,7 @@ import net.minecraft.util.Formatting;
 import user11681.phormat.api.ColorFunction;
 import user11681.phormat.api.format.TextFormatter;
 
-public interface FormattingAccess {
+public interface ExtendedFormatting {
     char getCode();
 
     ColorFunction getColorFunction();
