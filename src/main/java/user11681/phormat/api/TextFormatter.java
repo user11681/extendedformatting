@@ -1,4 +1,4 @@
-package user11681.phormat.api.format;
+package user11681.phormat.api;
 
 import net.minecraft.client.font.FontStorage;
 import net.minecraft.client.font.Glyph;

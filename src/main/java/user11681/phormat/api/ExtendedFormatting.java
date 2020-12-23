@@ -2,7 +2,6 @@ package user11681.phormat.api;
 
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
-import user11681.phormat.api.format.TextFormatter;
 
 public class ExtendedFormatting extends Formatting {
     protected ColorFunction colorFunction;
