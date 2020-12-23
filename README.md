@@ -22,12 +22,12 @@ dependencies {
 ```java
 public class Example {
     // will change color based on previous color and PRNG
-    public static final ExtendedFormatting colors = new Phormatting("COLORS", 'u', 16, null)
+    public static final ExtendedFormatting colors = FormattingRegistry.register("COLORS", 'u', 16, null)
         .color(previousColor -> previousColor + Random.nextInt(1 << 24));
     // constant purple
-    public static final ExtendedFormatting purple = new Phormatting("PURPLE", 'v', 17, 0xD083FF);
+    public static final ExtendedFormatting purple = FormattingRegistry.register("PURPLE", 'v', 17, 0xD083FF);
     // custom rendering on text
-    public static final ExtendedFormatting customFormatting = new Phormatting("THING", 'x', true).formatter((
+    public static final ExtendedFormatting customFormatting = FormattingRegistry.register("THING", 'x', true).formatter((
             TextRendererDrawerAccess drawer,
             Style style,
             int charIndex,
