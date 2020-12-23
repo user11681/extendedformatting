@@ -13,15 +13,17 @@ import user11681.phormat.api.ColorFunction;
 import user11681.phormat.api.format.TextFormatter;
 import user11681.phormat.asm.access.ExtendedFormatting;
 import user11681.phormat.asm.mixin.access.FormattingAccess;
+import user11681.phormat.asm.access.FormattingInstanceAccess;
 
 @SuppressWarnings("ConstantConditions")
 @Mixin(Formatting.class)
-abstract class FormattingMixin implements FormattingAccess, ExtendedFormatting {
+abstract class FormattingMixin implements FormattingAccess, FormattingInstanceAccess {
     @Shadow
     @Final
     private char code;
 
-    public boolean phormat_custom;
+    @Unique
+    private boolean custom;
 
     @Unique
     private ColorFunction colorFunction;
@@ -60,7 +62,12 @@ abstract class FormattingMixin implements FormattingAccess, ExtendedFormatting {
 
     @Override
     public boolean custom() {
-        return this.phormat_custom;
+        return this.custom;
+    }
+
+    @Override
+    public void setCustom() {
+        this.custom = true;
     }
 
     @Override
@@ -77,7 +84,7 @@ abstract class FormattingMixin implements FormattingAccess, ExtendedFormatting {
 
     @Inject(method = "getColorValue", at = @At("HEAD"), cancellable = true)
     public void applyColorFunction(CallbackInfoReturnable<Integer> info) {
-        if (this.phormat_custom && this.colorFunction != null) {
+        if (this.custom && this.colorFunction != null) {
             info.setReturnValue(this.colorFunction.apply(info.getReturnValueI()));
         }
     }

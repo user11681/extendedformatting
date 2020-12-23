@@ -5,6 +5,8 @@ import user11681.phormat.api.ColorFunction;
 import user11681.phormat.api.format.TextFormatter;
 
 public interface ExtendedFormatting {
+    boolean custom();
+
     char code();
 
     ColorFunction colorFunction();
@@ -14,8 +16,6 @@ public interface ExtendedFormatting {
     TextFormatter formatter();
 
     ExtendedFormatting formatter(TextFormatter formatter);
-
-    boolean custom();
 
     Formatting cast();
 }

@@ -8,10 +8,11 @@ import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import user11681.phormat.asm.access.ExtendedFormatting;
+import user11681.phormat.asm.access.FormattingInstanceAccess;
 import user11681.phormat.asm.mixin.access.FormattingAccess;
 import user11681.phormat.asm.mixin.access.TextColorAccess;
 
-@SuppressWarnings("JavaReflectionMemberAccess")
+@SuppressWarnings("ConstantConditions")
 public class FormattingRegistry {
     private static final Map<String, Formatting> nameMap = FormattingAccess.getNameMap();
     private static final Reference2ObjectOpenHashMap<Formatting, TextColor> colorMap = new Reference2ObjectOpenHashMap<>(TextColorAccess.getFormattingColors());
@@ -41,20 +42,15 @@ public class FormattingRegistry {
             throw new IllegalArgumentException(String.format("a Formatting with name %s already exists.", formatting.getName()));
         }
 
-        try {
-            Formatting.class.getDeclaredField("phormat_custom").setBoolean(formatting, true);
-        } catch (IllegalAccessException | NoSuchFieldException exception) {
-            throw new RuntimeException(exception);
-        }
+        FormattingInstanceAccess formattingAccess = (FormattingInstanceAccess) (Object) formatting;
+        formattingAccess.setCustom();
 
         Formatting[] values = FormattingAccess.getValues();
         int valueCount = values.length;
         Formatting[] newValues = new Formatting[valueCount + 1];
-
         System.arraycopy(values, 0, newValues, 0, valueCount);
 
         newValues[valueCount] = formatting;
-
         FormattingAccess.setValues(newValues);
 
         nameMap.put(FormattingAccess.sanitize(formatting.name()), formatting);
@@ -65,7 +61,7 @@ public class FormattingRegistry {
             colorMap.put(formatting, TextColorAccess.instantiate(formatting.getColorValue(), formatting.getName()));
         }
 
-        return (ExtendedFormatting) (Object) formatting;
+        return formattingAccess;
     }
 
     static {

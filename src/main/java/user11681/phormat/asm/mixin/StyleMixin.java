@@ -8,7 +8,6 @@ import com.google.gson.JsonSerializationContext;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Collection;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.ClickEvent;
@@ -70,7 +69,7 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public void addFormattings(Collection<Formatting> formattings) {
+    public void addFormattings(Iterable<Formatting> formattings) {
         for (Formatting formatting : formattings) {
             this.addFormatting(formatting);
         }
@@ -78,7 +77,7 @@ abstract class StyleMixin implements ExtendedStyle {
 
     @Override
     @Unique
-    public void addPhormattings(Collection<ExtendedFormatting> formattings) {
+    public void addPhormattings(Iterable<ExtendedFormatting> formattings) {
         for (ExtendedFormatting formatting : formattings) {
             this.addFormatting(formatting);
         }
