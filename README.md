@@ -28,26 +28,25 @@ public class Example {
     public static final ExtendedFormatting purple = FormattingRegistry.register("PURPLE", 'v', 17, 0xD083FF);
     // custom rendering on text
     public static final ExtendedFormatting customFormatting = FormattingRegistry.register("THING", 'x', true).formatter((
-            TextRendererDrawerAccess drawer,
-            Style style,
-            int charIndex,
-            int character,
-            FontStorage storage,
-            Glyph glyph,
-            GlyphRenderer glyphRenderer,
-            float red,
-            float green,
-            float blue,
-            float alpha,
-            float advance) -> {
-            float x = drawer.x(); // horizontal displacement of the left of the character
-                                  // from the center of the text
-            float y = drawer.y(); // vertical displacement of the top of the character
-                                  // from the center of the text
-        
-            // will draw a rectangle covering bottom half of the height and full width of the character
-            drawer.invokeAddRectangle(new GlyphRenderer.Rectangle(x, -y, x + advance, 0, 0.01F, red, green, blue, alpha));
-        }
-    );
+        TextRendererDrawerAccess drawer,
+        Style style,
+        int charIndex,
+        int character,
+        FontStorage storage,
+        Glyph glyph,
+        GlyphRenderer glyphRenderer,
+        float red,
+        float green,
+        float blue,
+        float alpha,
+        float advance) -> {
+        float x = drawer.x(); // horizontal displacement of the left of the character
+        // from the center of the text
+        float y = drawer.y(); // vertical displacement of the top of the character
+        // from the center of the text
+
+        // will draw a rectangle covering bottom half of the height and full width of the character
+        drawer.invokeAddRectangle(new GlyphRenderer.Rectangle(x, -y, x + advance, 0, 0.01F, red, green, blue, alpha));
+    });
 }
 ```
