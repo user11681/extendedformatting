@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 abstract class B {
     @ModifyVariable(method = "sendMessage(Lnet/minecraft/text/Text;Z)V", at = @At("LOAD"), ordinal = 0)
     public Text test(Text text) {
-        return new TranslatableText("§" + Test.color.code() + "§" + Test.test.code() + "test123");
+        return new TranslatableText(String.format("§%s123§r§%s456§r§%s789", Test.test.code(), Test.color.code(), Test.hybrid.code()));
     }
 }

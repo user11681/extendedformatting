@@ -25,9 +25,9 @@ public interface TextRendererDrawerAccess {
 
     float y();
 
-    boolean hasShadow();
+    boolean shadow();
 
-    boolean isTranslucent();
+    boolean translucent();
 
     Matrix4f matrix();
 

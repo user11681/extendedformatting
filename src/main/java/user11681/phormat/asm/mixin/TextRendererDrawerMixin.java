@@ -61,11 +61,11 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
 
     @Override
     @Accessor("shadow")
-    public abstract boolean hasShadow();
+    public abstract boolean shadow();
 
     @Override
     @Accessor("seeThrough")
-    public abstract boolean isTranslucent();
+    public abstract boolean translucent();
 
     @Override
     @Accessor("matrix")
@@ -87,10 +87,13 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
     @Invoker("addRectangle")
     public abstract void invokeAddRectangle(GlyphRenderer.Rectangle rectangle);
 
-    @Inject(method = "accept(ILnet/minecraft/text/Style;I)Z", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+    @Inject(method = "accept(ILnet/minecraft/text/Style;I)Z",
+            at = @At(value = "FIELD",
+                     opcode = Opcodes.PUTFIELD),
+            locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void formatCustom(int charIndex,
                             Style style,
-                            int y,
+                            int character,
                             CallbackInfoReturnable<Boolean> info,
                             FontStorage storage,
                             Glyph glyph,
@@ -106,7 +109,7 @@ abstract class TextRendererDrawerMixin implements TextRendererDrawerAccess {
                 TextFormatter formatter = ((ExtendedFormatting) formatting).formatter();
 
                 if (formatter != null) {
-                    formatter.format(this, style, charIndex, y, storage, glyph, glyphRenderer, isBold, red, green, blue, alpha, advance);
+                    formatter.format(this, style, charIndex, character, storage, glyph, glyphRenderer, red, green, blue, alpha, advance);
                 }
             }
         }

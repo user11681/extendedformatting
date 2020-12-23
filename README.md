@@ -1,60 +1,53 @@
-Phormat is a library that allows Fabric mod developers to easily add custom formatting to Minecraft.
+Phormat is a Fabric-based library that facilitates text formatting.
 
 ### include
+
 `build.gradle`:
+
 ```groovy
 repositories {
-    . . .
-    maven {
-        url "https://jitpack.io"
-    }
+    // . . .
+    maven {url = "https://dl.bintray.com/user11681/maven"}
 }
-. . .
+
 dependencies {
-    . . .
-    modApi include("com.github.user11681:phormat:1.16-SNAPSHOT")
+    // . . .
+    modApi(include("user11681:phormat:+")) // or choose a version from
+    // https://dl.bintray.com/user11681/maven/user11681/phormat
 }
 ```
 
 ### use
-`fabric.mod.json`:
-```json
-"entrypoints": {
-    "phormat": [
-        "com.example.Example"
-    ]
-}
-```
 
-`com/example/Example.java`:
 ```java
 public class Example {
-    private static final long start = System.currentTimeMillis();
-    public static final Phormatting COLORS = new Phormatting("COLORS", 'u', 16, null).color(previous -> (int) (start - System.currentTimeMillis()) * 100 % 0xFFFFFF);
-    public static final Phormatting EXAMPLE = new Phormatting("PHORMAT", 'x', true).formatter(new MyFormatter());
-    public static final Phormatting PURPLE = new Phormatting("PURPLE", 'v', 17, 0xD083FF);
-```
-
-`com/example/MyFormatter.java`:
-```java
-public class MyFormatter extends Phormatter {
-    @Override
-    public void format(TextRendererDrawerAccess drawer,
-                       Style style,
-                       int i,
-                       int j,
-                       FontStorage storage,
-                       Glyph glyph,
-                       GlyphRenderer glyphRenderer,
-                       boolean isBold,
-                       float red,
-                       float green,
-                       float blue,
-                       float alpha,
-                       float advance) {
-        int x = drawer.x();
-        int y = drawer.y() + 3;
-
-        drawer.invokeAddRectangle(new GlyphRenderer.Rectangle(x, y, x + advance, y + 2, 0.01F, red, green, blue, alpha);
+    // will change color based on previous color and PRNG
+    public static final ExtendedFormatting colors = new Phormatting("COLORS", 'u', 16, null)
+        .color(previousColor -> previousColor + Random.nextInt(1 << 24));
+    // constant purple
+    public static final ExtendedFormatting purple = new Phormatting("PURPLE", 'v', 17, 0xD083FF);
+    // custom rendering on text
+    public static final ExtendedFormatting customFormatting = new Phormatting("THING", 'x', true).formatter((
+            TextRendererDrawerAccess drawer,
+            Style style,
+            int charIndex,
+            int character,
+            FontStorage storage,
+            Glyph glyph,
+            GlyphRenderer glyphRenderer,
+            float red,
+            float green,
+            float blue,
+            float alpha,
+            float advance) -> {
+            float x = drawer.x(); // horizontal displacement of the left of the character
+                                  // from the center of the text
+            float y = drawer.y(); // vertical displacement of the top of the character
+                                  // from the center of the text
+        
+            // will draw a rectangle covering bottom half of the height and full width of the character
+            drawer.invokeAddRectangle(new GlyphRenderer.Rectangle(x, -y, x + advance, 0, 0.01F, red, green, blue, alpha));
+        }
+    );
 }
 ```
